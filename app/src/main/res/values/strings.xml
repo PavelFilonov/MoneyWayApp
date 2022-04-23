@@ -22,4 +22,7 @@
     <string name="search_group_button">Поиск</string>
     <string name="name_new_group">Название новой группы</string>
     <string name="create_group_button">Создать</string>
+    <string name="wallet_menu">Кошелёк</string>
+    <string name="groups_menu">Группы</string>
+    <string name="exit_menu">Выйти</string>
 </resources>
