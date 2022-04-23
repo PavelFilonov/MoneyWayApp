@@ -1,3 +1,25 @@
 <resources>
-    <string name="app_name">MoneyWayApp</string>
+    <string name="app_name">MoneyWay</string>
+    <string name="login_header">Вход</string>
+    <string name="register_header">Регистрация</string>
+    <string name="email">Введите email</string>
+    <string name="password">Введите пароль</string>
+    <string name="login">Войти</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="password_repeat">Повторите пароль</string>
+    <string name="input_login">Введите логин</string>
+    <string name="update_data">Изменить данные</string>
+    <string name="token">Токен</string>
+    <string name="search_group_button">Поиск</string>
+    <string name="name_new_group">Название новой группы</string>
+    <string name="create_group_button">Создать</string>
 </resources>
