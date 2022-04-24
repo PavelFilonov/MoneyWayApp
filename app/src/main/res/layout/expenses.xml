@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ExpensesFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/row_horizontal"
+        android:layout_marginVertical="@dimen/row_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editTextAddCategoryWallet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/name_category"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:minHeight="@dimen/min_size"
+            android:textColorHint="@color/gray" />
+
+        <Button
+            android:id="@+id/searchGroupButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/row_horizontal"
+            android:layout_weight="1.5"
+            android:backgroundTint="@color/blue"
+            android:text="@string/add_category_button" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/row_horizontal"
+        android:layout_marginVertical="@dimen/row_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/min_size"
+            android:layout_marginTop="@dimen/border_button"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/profile_image"
+            android:src="@drawable/ic_date_foreground" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>
