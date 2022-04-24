@@ -33,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:text="NickName"
                 android:textColor="@color/blue"
                 android:textSize="30sp" />
         </LinearLayout>
@@ -42,13 +43,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="right"
+            android:text="1000 р"
             android:textColor="@color/blue"
             android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="@dimen/border_button"
         android:layout_marginTop="30dp"
         android:background="@color/blue" />
 
@@ -58,7 +60,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="3dp"
+            android:layout_width="@dimen/border_button"
             android:layout_height="match_parent"
             android:background="@color/blue"
             android:orientation="vertical" />
@@ -70,10 +72,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
+            android:text="Доходы"
             android:textColor="@color/blue" />
 
         <LinearLayout
-            android:layout_width="3dp"
+            android:layout_width="@dimen/border_button"
             android:layout_height="match_parent"
             android:background="@color/blue"
             android:orientation="vertical" />
@@ -85,10 +88,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
+            android:text="Расходы"
             android:textColor="@color/blue" />
 
         <LinearLayout
-            android:layout_width="3dp"
+            android:layout_width="@dimen/border_button"
             android:layout_height="match_parent"
             android:background="@color/blue"
             android:orientation="vertical" />
@@ -100,10 +104,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
+            android:text="История"
             android:textColor="@color/blue" />
 
         <LinearLayout
-            android:layout_width="3dp"
+            android:layout_width="@dimen/border_button"
             android:layout_height="match_parent"
             android:background="@color/blue"
             android:orientation="vertical" />
@@ -118,6 +123,14 @@
         android:id="@+id/frame_wallet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
     </FrameLayout>
 
     <RelativeLayout

@@ -26,4 +26,8 @@
     <string name="groups_menu">Группы</string>
     <string name="exit_menu">Выйти</string>
     <string name="profile_image">Профиль</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name_category">Название категории</string>
+    <string name="add_category_button">Добавить</string>
 </resources>

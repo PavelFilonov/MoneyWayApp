@@ -16,4 +16,5 @@
     <dimen name="account_data_top">120dp</dimen>
     <dimen name="row_horizontal">20dp</dimen>
     <dimen name="row_vertical">15dp</dimen>
+    <dimen name="border_button">3dp</dimen>
 </resources>
