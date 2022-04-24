@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyWayApp">
         <activity
+            android:name=".GroupsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PersonalAccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity

@@ -1,9 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".GroupsActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="@dimen/row_horizontal"
+        android:layout_marginVertical="@dimen/row_vertical">
+
+        <EditText
+            android:id="@+id/editTextToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="@string/token"
+            android:layout_weight="1"
+            android:minHeight="@dimen/min_size"
+            android:textColorHint="@color/gray"
+            android:importantForAutofill="no" />
+
+        <Button
+            android:id="@+id/searchGroupButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:layout_weight="1.5"
+            android:layout_marginLeft="@dimen/row_horizontal"
+            android:text="@string/search_group_button" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="@dimen/row_horizontal"
+        android:layout_marginVertical="@dimen/row_vertical">
+
+        <EditText
+            android:id="@+id/editTextNewGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="@string/name_new_group"
+            android:layout_weight="1"
+            android:minHeight="@dimen/min_size"
+            android:textColorHint="@color/gray"
+            android:importantForAutofill="no" />
+
+        <Button
+            android:id="@+id/createGroupButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blue"
+            android:layout_weight="1.5"
+            android:layout_marginLeft="@dimen/row_horizontal"
+            android:text="@string/create_group_button" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_groups"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:menu="@menu/bottom_menu" />
+    </RelativeLayout>
+</LinearLayout>

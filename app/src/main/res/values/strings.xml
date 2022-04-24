@@ -25,4 +25,5 @@
     <string name="wallet_menu">Кошелёк</string>
     <string name="groups_menu">Группы</string>
     <string name="exit_menu">Выйти</string>
+    <string name="profile_image">Профиль</string>
 </resources>

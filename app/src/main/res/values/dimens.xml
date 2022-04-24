@@ -3,7 +3,7 @@
     <dimen name="app_name_top">120dp</dimen>
     <dimen name="header">30sp</dimen>
     <dimen name="login_header_top">100dp</dimen>
-    <dimen name="min_height_edit_text">48dp</dimen>
+    <dimen name="min_size">48dp</dimen>
     <dimen name="email_top">80dp</dimen>
     <dimen name="edit_text_horizontal">30dp</dimen>
     <dimen name="password_top">30dp</dimen>
@@ -14,6 +14,6 @@
     <dimen name="register_header_top">60dp</dimen>
     <dimen name="username">40sp</dimen>
     <dimen name="account_data_top">120dp</dimen>
-    <dimen name="groups_row_horizontal">20dp</dimen>
-    <dimen name="groups_row_vertical">15dp</dimen>
+    <dimen name="row_horizontal">20dp</dimen>
+    <dimen name="row_vertical">15dp</dimen>
 </resources>
