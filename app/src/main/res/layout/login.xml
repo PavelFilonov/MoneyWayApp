@@ -46,7 +46,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editTextEmailAddress"
+            android:id="@+id/editTextLoginEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
@@ -65,7 +65,7 @@
         app:passwordToggleEnabled="true">
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/editTextLoginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"

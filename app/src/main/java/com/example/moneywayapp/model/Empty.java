@@ -1,2 +1,4 @@
-package com.example.moneywayapp.model;public class Empty {
+package com.example.moneywayapp.model;
+
+public class Empty {
 }

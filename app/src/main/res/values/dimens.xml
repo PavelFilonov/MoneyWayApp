@@ -1,10 +1,10 @@
 <resources>
     <dimen name="app_name">30sp</dimen>
-    <dimen name="app_name_top">120dp</dimen>
+    <dimen name="app_name_top">50dp</dimen>
     <dimen name="header">30sp</dimen>
     <dimen name="login_header_top">100dp</dimen>
     <dimen name="min_size">48dp</dimen>
-    <dimen name="email_top">80dp</dimen>
+    <dimen name="email_top">60dp</dimen>
     <dimen name="edit_text_horizontal">30dp</dimen>
     <dimen name="password_top">30dp</dimen>
     <dimen name="text_button">15sp</dimen>
