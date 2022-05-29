@@ -1,7 +1,5 @@
 package com.example.moneywayapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,21 +9,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
 import com.example.moneywayapp.model.Empty;
 import com.example.moneywayapp.model.User;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String BASE_URL = "https://moneywayapi.herokuapp.com/";
     private static final String TAG = LoginActivity.class.getSimpleName();
 
     private EditText emailText, passwordText;
@@ -45,26 +41,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onClickLoginButton(View view) {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        UserAPI userAPI = retrofit.create(UserAPI.class);
-
         User user = new User();
         user.setEmail(emailText.toString());
         user.setPassword(passwordText.toString());
 
+        UserAPI userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
         Call<Empty> call = userAPI.login(user);
         call.enqueue(new Callback<Empty>() {
             @Override
             public void onResponse(Call<Empty> call, Response<Empty> response) {
-                Log.w(TAG, response.message());
+                Log.i(TAG, response.message());
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 LoginActivity.this.startActivity(intent);
             }
@@ -78,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onClickRegistrationTextView(View view) {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
         LoginActivity.this.startActivity(intent);
     }
 }

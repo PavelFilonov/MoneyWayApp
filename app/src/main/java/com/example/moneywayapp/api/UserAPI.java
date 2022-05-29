@@ -11,4 +11,7 @@ public interface UserAPI {
 
     @POST("login")
     Call<Empty> login(@Body User user);
+
+    @POST("register")
+    Call<Empty> register(@Body User user);
 }
