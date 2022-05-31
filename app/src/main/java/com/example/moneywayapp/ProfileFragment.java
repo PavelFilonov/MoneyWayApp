@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,9 +40,9 @@ public class ProfileFragment extends Fragment {
         emailText = requireView().findViewById(R.id.editTextProfileEmail);
         loginText = requireView().findViewById(R.id.editTextProfileUsername);
         passwordText = requireView().findViewById(R.id.editTextProfilePassword);
-        Button updateEmailButton = requireView().findViewById(R.id.updateEmailButton);
-        Button updateLoginButton = requireView().findViewById(R.id.updateLoginButton);
-        Button updatePasswordButton = requireView().findViewById(R.id.updatePasswordButton);
+        ImageButton updateEmailButton = requireView().findViewById(R.id.updateEmailButton);
+        ImageButton updateLoginButton = requireView().findViewById(R.id.updateLoginButton);
+        ImageButton updatePasswordButton = requireView().findViewById(R.id.updatePasswordButton);
 
         initUser();
 
