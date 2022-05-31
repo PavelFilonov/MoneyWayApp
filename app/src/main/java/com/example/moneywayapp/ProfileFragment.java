@@ -1,21 +1,21 @@
 package com.example.moneywayapp;
 
+import static com.example.moneywayapp.MainActivity.user;
+
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
-import com.example.moneywayapp.model.Empty;
 import com.example.moneywayapp.model.User;
 
 import retrofit2.Call;
@@ -28,13 +28,15 @@ public class ProfileFragment extends Fragment {
 
     private EditText emailText, loginText, passwordText;
 
-    private User user;
-
     private UserAPI userAPI;
 
+    public ProfileFragment() {
+        super(R.layout.profile);
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         TextView loginTextView = requireView().findViewById(R.id.usernameProfileTextView);
         emailText = requireView().findViewById(R.id.editTextProfileEmail);
@@ -44,62 +46,52 @@ public class ProfileFragment extends Fragment {
         ImageButton updateLoginButton = requireView().findViewById(R.id.updateLoginButton);
         ImageButton updatePasswordButton = requireView().findViewById(R.id.updatePasswordButton);
 
-        initUser();
-
         loginTextView.setText(user.getLogin());
+        userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
 
         updateEmailButton.setOnClickListener(this::onClickedUpdateEmailButton);
         updateLoginButton.setOnClickListener(this::onClickedUpdateLoginButton);
         updatePasswordButton.setOnClickListener(this::onClickedUpdatePasswordButton);
-
-        return inflater.inflate(R.layout.profile, container, false);
     }
 
     private void onClickedUpdateEmailButton(View view) {
-        Call<Empty> call = userAPI.updateEmail(emailText.toString());
-        callEnqueue(call, "Email изменён");
+        Call<Void> call = userAPI.updateEmail(emailText.getText().toString());
+        callEnqueue(call, "Email изменён", "Email уже используется");
     }
 
     private void onClickedUpdateLoginButton(View view) {
-        Call<Empty> call = userAPI.updateLogin(loginText.toString());
-        callEnqueue(call, "Логин изменён");
+        Call<Void> call = userAPI.updateLogin(loginText.getText().toString());
+        callEnqueue(call, "Логин изменён", "Логин уже используется");
     }
 
     private void onClickedUpdatePasswordButton(View view) {
-        Call<Empty> call = userAPI.updatePassword(passwordText.toString());
-        callEnqueue(call, "Пароль изменён");
+        Call<Void> call = userAPI.updatePassword(passwordText.getText().toString());
+        callEnqueue(call, "Пароль изменён", null);
     }
 
-    private void callEnqueue(Call<Empty> call, String message) {
-        call.enqueue(new Callback<Empty>() {
+    private void callEnqueue(Call<Void> call, String successMessage, String alreadyExistsMessage) {
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Empty> call, Response<Empty> response) {
-                Log.i(TAG, message);
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                switch (response.code()) {
+                    case 422:
+                        Log.i(TAG, response.message());
+                        Toast.makeText(getContext(), response.message(), Toast.LENGTH_LONG).show();
+                        break;
+                    case 409:
+                        Log.i(TAG, alreadyExistsMessage);
+                        Toast.makeText(getContext(), alreadyExistsMessage, Toast.LENGTH_SHORT).show();
+                        break;
+                    case 200:
+                        Log.i(TAG, successMessage);
+                        Toast.makeText(getContext(), successMessage, Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
 
             @Override
-            public void onFailure(Call<Empty> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.i(TAG, t.getMessage());
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void initUser() {
-        userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
-        Call<User> call = userAPI.profile();
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                user = response.body();
-                Log.i(TAG, "Удачное подключение к профилю");
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.w(TAG, t.getMessage());
-                Toast.makeText(getContext(), "Не удалось подключиться к профилю", Toast.LENGTH_SHORT).show();
             }
         });
     }

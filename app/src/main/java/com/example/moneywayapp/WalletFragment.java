@@ -1,24 +1,25 @@
 package com.example.moneywayapp;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.CategoryOfUserAPI;
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.OperationAPI;
 import com.example.moneywayapp.model.Category;
-import com.example.moneywayapp.model.Empty;
+import com.example.moneywayapp.util.TransitionHandler;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,9 +41,16 @@ public class WalletFragment extends Fragment {
 
     private OperationAPI operationAPI;
 
+    private TransitionHandler transitionHandler;
+
+    public WalletFragment(TransitionHandler transitionHandler) {
+        super(R.layout.wallet);
+        this.transitionHandler = transitionHandler;
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         toProfileButton = requireView().findViewById(R.id.toProfileButton);
         usernameTextView = requireView().findViewById(R.id.usernameWalletTextView);
@@ -53,6 +61,7 @@ public class WalletFragment extends Fragment {
         historyButton = requireView().findViewById(R.id.historyWalletButton);
         newCategoryButton = requireView().findViewById(R.id.newCategoryWalletButton);
 
+        toProfileButton.setOnClickListener(this::onClickedToProfileButton);
         incomeButton.setOnClickListener(this::onClickedIncomeButton);
         expenseButton.setOnClickListener(this::onClickedExpenseButton);
         historyButton.setOnClickListener(this::onClickedHistoryButton);
@@ -62,8 +71,10 @@ public class WalletFragment extends Fragment {
         operationAPI = HelperAPI.getRetrofit().create(OperationAPI.class);
 
         onClickedIncomeButton(incomeButton);
+    }
 
-        return inflater.inflate(R.layout.wallet, container, false);
+    private void onClickedToProfileButton(View view) {
+        transitionHandler.moveToProfile();
     }
 
     @SuppressLint("ResourceAsColor")
@@ -93,21 +104,29 @@ public class WalletFragment extends Fragment {
 
     private void onClickedNewCategoryButton(View view) {
         Category category = new Category();
-        category.setName(nameNewCategoryText.toString());
+        category.setName(nameNewCategoryText.getText().toString());
 
-        Call<Empty> call = categoryAPI.add(category);
-        call.enqueue(new Callback<Empty>() {
+        Call<Void> call = categoryAPI.add(category);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Empty> call, Response<Empty> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 String msg = "Категория " + category.getName() + " добавлена";
-                Log.i(TAG, msg);
-                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+
+                switch (response.code()) {
+                    case 422:
+                        Log.i(TAG, response.message());
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                        break;
+                    case 200:
+                        Log.i(TAG, msg);
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
 
             @Override
-            public void onFailure(Call<Empty> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.w(TAG, t.getMessage());
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 

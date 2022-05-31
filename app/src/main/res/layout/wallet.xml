@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/light_gray"
+            android:backgroundTint="@color/white"
             android:text="@string/income"
             android:textColor="@color/blue" />
 
@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/light_gray"
+            android:backgroundTint="@color/white"
             android:text="@string/expense"
             android:textColor="@color/blue" />
 
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/light_gray"
+            android:backgroundTint="@color/white"
             android:text="@string/history"
             android:textColor="@color/blue" />
     </LinearLayout>

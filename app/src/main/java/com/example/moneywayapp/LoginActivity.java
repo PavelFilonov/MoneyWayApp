@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
-import com.example.moneywayapp.model.Empty;
 import com.example.moneywayapp.model.User;
 
 import retrofit2.Call;
@@ -42,23 +41,34 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onClickLoginButton(View view) {
         User user = new User();
-        user.setEmail(emailText.toString());
-        user.setPassword(passwordText.toString());
+        user.setEmail(emailText.getText().toString());
+        user.setPassword(passwordText.getText().toString());
 
         UserAPI userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
-        Call<Empty> call = userAPI.login(user);
-        call.enqueue(new Callback<Empty>() {
+        Call<Void> call = userAPI.login(user);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Empty> call, Response<Empty> response) {
-                Log.i(TAG, response.message());
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                LoginActivity.this.startActivity(intent);
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                switch (response.code()) {
+                    case 404:
+                        Log.i(TAG, response.message());
+                        Toast.makeText(getApplicationContext(), "Пользователь не найден", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 409:
+                        Log.i(TAG, response.message());
+                        Toast.makeText(getApplicationContext(), "Неверный пароль", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 200:
+                        Log.i(TAG, response.message());
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        LoginActivity.this.startActivity(intent);
+                        break;
+                }
             }
 
             @Override
-            public void onFailure(Call<Empty> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.w(TAG, t.getMessage());
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

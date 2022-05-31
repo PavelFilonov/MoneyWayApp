@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
-import com.example.moneywayapp.model.Empty;
 import com.example.moneywayapp.model.User;
 
 import retrofit2.Call;
@@ -43,30 +42,40 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void onClickRegistrationButton(View view) {
-        if (!passwordText1.toString().equals(passwordText2.toString())) {
-            Log.w(TAG, "Пароли не совпадают: " + passwordText1.toString() + " и " + passwordText2.toString());
+        if (!passwordText1.getText().toString().equals(passwordText2.getText().toString())) {
+            Log.w(TAG, "Пароли не совпадают: " + passwordText1.getText() + " и " + passwordText2.getText());
             Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show();
         }
 
         User user = new User();
-        user.setEmail(emailText.toString());
-        user.setLogin(loginText.toString());
-        user.setPassword(passwordText1.toString());
+        user.setEmail(emailText.getText().toString());
+        user.setLogin(loginText.getText().toString());
+        user.setPassword(passwordText1.getText().toString());
 
         UserAPI userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
-        Call<Empty> call = userAPI.register(user);
-        call.enqueue(new Callback<Empty>() {
+        Call<Void> call = userAPI.register(user);
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Empty> call, Response<Empty> response) {
-                Log.i(TAG, response.message());
-                Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-                RegistrationActivity.this.startActivity(intent);
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                switch (response.code()) {
+                    case 422:
+                        Log.i(TAG, response.message());
+                        Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                        break;
+                    case 409:
+                        Log.i(TAG, response.message());
+                        Toast.makeText(getApplicationContext(), "Пользователь уже существует", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 201:
+                        Log.i(TAG, response.message());
+                        Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                        RegistrationActivity.this.startActivity(intent);
+                }
             }
 
             @Override
-            public void onFailure(Call<Empty> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Log.w(TAG, t.getMessage());
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
