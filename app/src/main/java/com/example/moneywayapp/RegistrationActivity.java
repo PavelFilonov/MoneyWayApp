@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
-import com.example.moneywayapp.model.User;
+import com.example.moneywayapp.model.dto.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -1,4 +1,4 @@
-package com.example.moneywayapp.model;
+package com.example.moneywayapp.model.dto;
 
 import java.util.List;
 

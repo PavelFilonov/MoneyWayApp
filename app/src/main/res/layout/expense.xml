@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editTextAddCategoryWallet"
+            android:id="@+id/editTextAddCategoryExpenseWallet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,7 +25,7 @@
             android:textColorHint="@color/gray" />
 
         <Button
-            android:id="@+id/searchGroupButton"
+            android:id="@+id/addCategoryExpenseWalletButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/row_horizontal"
@@ -42,7 +42,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/datePickerExpenseWalletButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/min_size"
             android:layout_marginTop="@dimen/border_button"
@@ -52,10 +52,16 @@
             android:src="@drawable/ic_date_foreground" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/dateExpenseWalletText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_expense_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </FrameLayout>
 </LinearLayout>

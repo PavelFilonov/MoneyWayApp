@@ -1,4 +1,4 @@
-package com.example.moneywayapp.model;
+package com.example.moneywayapp.model.dto;
 
 public class Operation {
 

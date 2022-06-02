@@ -1,4 +1,4 @@
-package com.example.moneywayapp.model;
+package com.example.moneywayapp.model.context;
 
 import java.time.LocalDateTime;
 

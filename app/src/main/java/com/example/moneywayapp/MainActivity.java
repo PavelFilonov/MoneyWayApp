@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
-import com.example.moneywayapp.model.User;
+import com.example.moneywayapp.model.dto.User;
 import com.example.moneywayapp.util.TransitionHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -69,9 +69,24 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment(this)).commit();
     }
 
+    @Override
+    public void moveToIncome() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new IncomeFragment()).commit();
+    }
+
+    @Override
+    public void moveToExpense() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new ExpenseFragment()).commit();
+    }
+
+    @Override
+    public void moveToHistory() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new HistoryFragment()).commit();
+    }
+
     private void initUser() {
         userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
-        Call<User> call = userAPI.profile(user);
+        Call<User> call = userAPI.profile();
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

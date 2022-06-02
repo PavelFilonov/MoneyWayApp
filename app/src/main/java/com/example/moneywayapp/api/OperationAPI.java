@@ -1,8 +1,8 @@
 package com.example.moneywayapp.api;
 
-import com.example.moneywayapp.model.Operation;
-import com.example.moneywayapp.model.DateOperationContext;
-import com.example.moneywayapp.model.User;
+import com.example.moneywayapp.model.dto.Operation;
+import com.example.moneywayapp.model.context.DateOperationContext;
+import com.example.moneywayapp.model.dto.User;
 
 import java.util.List;
 
