@@ -1,7 +1,8 @@
 package com.example.moneywayapp;
 
+import static com.example.moneywayapp.MainActivity.user;
+
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.CategoryOfUserAPI;
@@ -20,6 +22,8 @@ import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.OperationAPI;
 import com.example.moneywayapp.model.Category;
 import com.example.moneywayapp.util.TransitionHandler;
+
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,13 +33,11 @@ public class WalletFragment extends Fragment {
 
     private static final String TAG = WalletFragment.class.getSimpleName();
 
-    private ImageButton toProfileButton;
-
-    private TextView usernameTextView, totalMoney;
+    private TextView totalMoney;
 
     private EditText nameNewCategoryText;
 
-    private Button incomeButton, expenseButton, historyButton, newCategoryButton;
+    private Button incomeButton, expenseButton, historyButton;
 
     private CategoryOfUserAPI categoryAPI;
 
@@ -52,14 +54,13 @@ public class WalletFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        toProfileButton = requireView().findViewById(R.id.toProfileButton);
-        usernameTextView = requireView().findViewById(R.id.usernameWalletTextView);
+        ImageButton toProfileButton = requireView().findViewById(R.id.toProfileButton);
         totalMoney = requireView().findViewById(R.id.totalWalletTextView);
         nameNewCategoryText = requireView().findViewById(R.id.editTextWalletNameNewCategory);
         incomeButton = requireView().findViewById(R.id.incomeWalletButton);
         expenseButton = requireView().findViewById(R.id.expenseWalletButton);
         historyButton = requireView().findViewById(R.id.historyWalletButton);
-        newCategoryButton = requireView().findViewById(R.id.newCategoryWalletButton);
+        Button newCategoryButton = requireView().findViewById(R.id.newCategoryWalletButton);
 
         toProfileButton.setOnClickListener(this::onClickedToProfileButton);
         incomeButton.setOnClickListener(this::onClickedIncomeButton);
@@ -80,8 +81,8 @@ public class WalletFragment extends Fragment {
     @SuppressLint("ResourceAsColor")
     private void onClickedIncomeButton(View view) {
         doInactiveButtons();
-        incomeButton.setBackgroundColor(R.color.blue);
-        incomeButton.setTextColor(R.color.white);
+        incomeButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.blue));
+        incomeButton.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.white));
 
         // TODO: обработка времени ...
     }
@@ -89,16 +90,16 @@ public class WalletFragment extends Fragment {
     @SuppressLint("ResourceAsColor")
     private void onClickedExpenseButton(View view) {
         doInactiveButtons();
-        expenseButton.setBackgroundColor(R.color.blue);
-        expenseButton.setTextColor(R.color.white);
+        expenseButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.blue));
+        expenseButton.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.white));
 
     }
 
     @SuppressLint("ResourceAsColor")
     private void onClickedHistoryButton(View view) {
         doInactiveButtons();
-        historyButton.setBackgroundColor(R.color.blue);
-        historyButton.setTextColor(R.color.white);
+        historyButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.blue));
+        historyButton.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.white));
 
     }
 
@@ -135,13 +136,13 @@ public class WalletFragment extends Fragment {
 
     @SuppressLint("ResourceAsColor")
     private void doInactiveButtons() {
-        incomeButton.setBackgroundColor(R.color.light_gray);
-        incomeButton.setTextColor(R.color.blue);
+        incomeButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.white));
+        incomeButton.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.blue));
 
-        expenseButton.setBackgroundColor(R.color.light_gray);
-        expenseButton.setTextColor(R.color.blue);
+        expenseButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.white));
+        expenseButton.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.blue));
 
-        historyButton.setBackgroundColor(R.color.light_gray);
-        historyButton.setTextColor(R.color.blue);
+        historyButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.white));
+        historyButton.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.blue));
     }
 }

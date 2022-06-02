@@ -1,6 +1,7 @@
 package com.example.moneywayapp;
 
 import static com.example.moneywayapp.MainActivity.user;
+import static com.example.moneywayapp.MainActivity.userAPI;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,9 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.moneywayapp.api.HelperAPI;
-import com.example.moneywayapp.api.UserAPI;
-import com.example.moneywayapp.model.User;
+import com.example.moneywayapp.util.TransitionHandler;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,10 +27,11 @@ public class ProfileFragment extends Fragment {
 
     private EditText emailText, loginText, passwordText;
 
-    private UserAPI userAPI;
+    private TransitionHandler transitionHandler;
 
-    public ProfileFragment() {
+    public ProfileFragment(TransitionHandler transitionHandler) {
         super(R.layout.profile);
+        this.transitionHandler = transitionHandler;
     }
 
     @Override
@@ -47,7 +47,6 @@ public class ProfileFragment extends Fragment {
         ImageButton updatePasswordButton = requireView().findViewById(R.id.updatePasswordButton);
 
         loginTextView.setText(user.getLogin());
-        userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
 
         updateEmailButton.setOnClickListener(this::onClickedUpdateEmailButton);
         updateLoginButton.setOnClickListener(this::onClickedUpdateLoginButton);
@@ -55,17 +54,17 @@ public class ProfileFragment extends Fragment {
     }
 
     private void onClickedUpdateEmailButton(View view) {
-        Call<Void> call = userAPI.updateEmail(emailText.getText().toString());
+        Call<Void> call = userAPI.updateEmail(user, emailText.getText().toString());
         callEnqueue(call, "Email изменён", "Email уже используется");
     }
 
     private void onClickedUpdateLoginButton(View view) {
-        Call<Void> call = userAPI.updateLogin(loginText.getText().toString());
+        Call<Void> call = userAPI.updateLogin(user, loginText.getText().toString());
         callEnqueue(call, "Логин изменён", "Логин уже используется");
     }
 
     private void onClickedUpdatePasswordButton(View view) {
-        Call<Void> call = userAPI.updatePassword(passwordText.getText().toString());
+        Call<Void> call = userAPI.updatePassword(user, passwordText.getText().toString());
         callEnqueue(call, "Пароль изменён", null);
     }
 
@@ -83,8 +82,19 @@ public class ProfileFragment extends Fragment {
                         Toast.makeText(getContext(), alreadyExistsMessage, Toast.LENGTH_SHORT).show();
                         break;
                     case 200:
+                        if (successMessage.contains("Email"))
+                            user.setEmail(emailText.getText().toString());
+
+                        if (successMessage.contains("Логин"))
+                            user.setEmail(loginText.getText().toString());
+
+                        if (successMessage.contains("Пароль"))
+                            user.setEmail(passwordText.getText().toString());
+
                         Log.i(TAG, successMessage);
                         Toast.makeText(getContext(), successMessage, Toast.LENGTH_SHORT).show();
+
+                        transitionHandler.moveToProfile();
                         break;
                 }
             }

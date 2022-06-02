@@ -3,23 +3,36 @@ package com.example.moneywayapp;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
+import com.example.moneywayapp.model.User;
 import com.example.moneywayapp.util.TransitionHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity implements TransitionHandler {
 
-    public static TransitionHandler transitionHandler = this;
+    private static final String TAG = MainActivity.class.getSimpleName();
+
+    public static User user;
+
+    public static UserAPI userAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        initUser();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(nav_listener);
@@ -40,8 +53,7 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
                         fragment = new GroupsFragment();
                         break;
                     case R.id.menu_exit:
-                        UserAPI userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
-                        userAPI.logout();
+                        user = null;
                         exit = true;
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         MainActivity.this.startActivity(intent);
@@ -54,6 +66,24 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     @Override
     public void moveToProfile() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment(this)).commit();
+    }
+
+    private void initUser() {
+        userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
+        Call<User> call = userAPI.profile(user);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                user = response.body();
+                TextView usernameTextView = findViewById(R.id.usernameWalletTextView);
+                usernameTextView.setText(user.getLogin());
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.w(TAG, t.getMessage());
+            }
+        });
     }
 }

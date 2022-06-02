@@ -1,5 +1,7 @@
 package com.example.moneywayapp;
 
+import static com.example.moneywayapp.MainActivity.user;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onClickLoginButton(View view) {
-        User user = new User();
+        user = new User();
         user.setEmail(emailText.getText().toString());
         user.setPassword(passwordText.getText().toString());
 

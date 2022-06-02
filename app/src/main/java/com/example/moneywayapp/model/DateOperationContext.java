@@ -2,18 +2,19 @@ package com.example.moneywayapp.model;
 
 import java.time.LocalDateTime;
 
-public class OperationRequestContext {
+public class DateOperationContext {
+
     private Long categoryId;
     private LocalDateTime fromDate;
     private LocalDateTime toDate;
 
-    public OperationRequestContext(Long categoryId, LocalDateTime fromDate, LocalDateTime toDate) {
+    public DateOperationContext(Long categoryId, LocalDateTime fromDate, LocalDateTime toDate) {
         this.categoryId = categoryId;
         this.fromDate = fromDate;
         this.toDate = toDate;
     }
 
-    public OperationRequestContext() {
+    public DateOperationContext() {
     }
 
     public Long getCategoryId() {
