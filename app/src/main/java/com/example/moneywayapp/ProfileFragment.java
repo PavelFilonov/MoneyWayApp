@@ -54,17 +54,17 @@ public class ProfileFragment extends Fragment {
     }
 
     private void onClickedUpdateEmailButton(View view) {
-        Call<Void> call = userAPI.updateEmail(user, emailText.getText().toString());
+        Call<Void> call = userAPI.updateEmail(emailText.getText().toString());
         callEnqueue(call, "Email изменён", "Email уже используется");
     }
 
     private void onClickedUpdateLoginButton(View view) {
-        Call<Void> call = userAPI.updateLogin(user, loginText.getText().toString());
+        Call<Void> call = userAPI.updateLogin(loginText.getText().toString());
         callEnqueue(call, "Логин изменён", "Логин уже используется");
     }
 
     private void onClickedUpdatePasswordButton(View view) {
-        Call<Void> call = userAPI.updatePassword(user, passwordText.getText().toString());
+        Call<Void> call = userAPI.updatePassword(passwordText.getText().toString());
         callEnqueue(call, "Пароль изменён", null);
     }
 

@@ -1,5 +1,7 @@
 package com.example.moneywayapp;
 
+import static com.example.moneywayapp.MainActivity.authResponse;
+import static com.example.moneywayapp.MainActivity.token;
 import static com.example.moneywayapp.MainActivity.user;
 
 import android.content.Intent;
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
 import com.example.moneywayapp.model.dto.User;
+import com.example.moneywayapp.model.response.AuthResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,10 +50,10 @@ public class LoginActivity extends AppCompatActivity {
         user.setPassword(passwordText.getText().toString());
 
         UserAPI userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
-        Call<Void> call = userAPI.login(user);
-        call.enqueue(new Callback<Void>() {
+        Call<AuthResponse> call = userAPI.login(user);
+        call.enqueue(new Callback<AuthResponse>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                 switch (response.code()) {
                     case 404:
                         Log.i(TAG, response.message());
@@ -61,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Неверный пароль", Toast.LENGTH_SHORT).show();
                         break;
                     case 200:
+                        authResponse = response.body();
+                        token = "Bearer_" + authResponse.getToken();
                         Log.i(TAG, response.message());
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         LoginActivity.this.startActivity(intent);
@@ -69,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<AuthResponse> call, Throwable t) {
                 Log.w(TAG, t.getMessage());
             }
         });

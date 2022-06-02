@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 public interface OperationAPI {
 
     @POST("operations")
-    Call<Void> add(@Body User user, @Body Operation operation);
+    Call<Void> add(@Body Operation operation);
 
     @GET("operations")
     Call<List<Operation>> getByCategoryAndPeriod(@Body DateOperationContext dateOperationContext);

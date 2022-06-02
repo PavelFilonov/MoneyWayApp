@@ -76,7 +76,7 @@ public class ExpenseFragment extends Fragment {
         Category category = new Category();
         category.setName(nameNewCategoryText.getText().toString());
 
-        Call<Void> call = categoryAPI.add(new UserCategoryContext(user, category));
+        Call<Void> call = categoryAPI.add(category);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

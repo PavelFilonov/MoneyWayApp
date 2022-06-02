@@ -75,7 +75,7 @@ public class IncomeFragment extends Fragment {
     }
 
     private void initCategories() {
-        Call<List<Category>> call = categoryAPI.get(user);
+        Call<List<Category>> call = categoryAPI.get();
         call.enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
@@ -93,7 +93,7 @@ public class IncomeFragment extends Fragment {
         Category category = new Category();
         category.setName(nameNewCategoryText.getText().toString());
 
-        Call<Void> call = categoryAPI.add(new UserCategoryContext(user, category));
+        Call<Void> call = categoryAPI.add(category);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
 import com.example.moneywayapp.model.dto.User;
+import com.example.moneywayapp.model.response.AuthResponse;
 import com.example.moneywayapp.util.TransitionHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,6 +27,10 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
     public static User user;
 
     public static UserAPI userAPI;
+
+    public static AuthResponse authResponse;
+
+    public static String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

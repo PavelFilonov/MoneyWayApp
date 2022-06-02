@@ -1,5 +1,8 @@
 package com.example.moneywayapp;
 
+import static com.example.moneywayapp.MainActivity.authResponse;
+import static com.example.moneywayapp.MainActivity.token;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
 import com.example.moneywayapp.model.dto.User;
+import com.example.moneywayapp.model.response.AuthResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,10 +57,10 @@ public class RegistrationActivity extends AppCompatActivity {
         user.setPassword(passwordText1.getText().toString());
 
         UserAPI userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
-        Call<Void> call = userAPI.register(user);
-        call.enqueue(new Callback<Void>() {
+        Call<AuthResponse> call = userAPI.register(user);
+        call.enqueue(new Callback<AuthResponse>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                 switch (response.code()) {
                     case 422:
                         Log.i(TAG, response.message());
@@ -67,6 +71,8 @@ public class RegistrationActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Пользователь уже существует", Toast.LENGTH_SHORT).show();
                         break;
                     case 201:
+                        authResponse = response.body();
+                        token = "Bearer_" + authResponse.getToken();
                         Log.i(TAG, response.message());
                         Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                         RegistrationActivity.this.startActivity(intent);
@@ -74,7 +80,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<AuthResponse> call, Throwable t) {
                 Log.w(TAG, t.getMessage());
             }
         });

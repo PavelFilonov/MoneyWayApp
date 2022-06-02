@@ -17,7 +17,7 @@ import retrofit2.http.Query;
 public interface CategoryOfUserAPI {
 
     @GET("categories")
-    Call<List<Category>> get(@Body User user);
+    Call<List<Category>> get();
 
     @DELETE("categories/{id}")
     Call<Void> delete(@Path(value = "id") Long id);
@@ -26,5 +26,5 @@ public interface CategoryOfUserAPI {
     Call<Void> rename(@Path(value = "id") Long id, @Query(value = "name") String name);
 
     @POST("categories")
-    Call<Void> add(@Body UserCategoryContext userCategoryContext);
+    Call<Void> add(@Body Category category);
 }
