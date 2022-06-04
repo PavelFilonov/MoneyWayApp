@@ -1,8 +1,7 @@
 package com.example.moneywayapp.api;
 
-import com.example.moneywayapp.model.dto.Operation;
 import com.example.moneywayapp.model.context.DateOperationContext;
-import com.example.moneywayapp.model.dto.User;
+import com.example.moneywayapp.model.dto.Operation;
 
 import java.util.List;
 
@@ -16,6 +15,6 @@ public interface OperationAPI {
     @POST("operations")
     Call<Void> add(@Body Operation operation);
 
-    @GET("operations")
+    @POST("operations/filter")
     Call<List<Operation>> getByCategoryAndPeriod(@Body DateOperationContext dateOperationContext);
 }

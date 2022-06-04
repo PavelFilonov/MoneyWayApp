@@ -7,9 +7,12 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1945" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/drawable/ic_person_background.xml" value="0.1945" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/drawable/ic_person_foreground.xml" value="0.1945" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/category_item.xml" value="0.25" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/category_list_item.xml" value="0.1346328195829556" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/expense.xml" value="0.25" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/expenses.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/group.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/group_item.xml" value="0.1675929884566054" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/groups.xml" value="0.1675929884566054" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/history.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MoneyWayApp/app/src/main/res/layout/income.xml" value="0.22" />

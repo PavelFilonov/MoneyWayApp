@@ -1,7 +1,5 @@
 package com.example.moneywayapp;
 
-import static com.example.moneywayapp.MainActivity.user;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -59,7 +57,7 @@ public class ExpenseFragment extends Fragment {
         ImageButton pickDateButton = requireView().findViewById(R.id.datePickerExpenseWalletButton);
         dateText = requireView().findViewById(R.id.dateExpenseWalletText);
 
-        categoryAPI = HelperAPI.getRetrofit().create(CategoryOfUserAPI.class);
+        categoryAPI = HelperAPI.getRetrofitAuth().create(CategoryOfUserAPI.class);
 
         toDate = LocalDateTime.now();
         fromDate = toDate.minusDays(1);

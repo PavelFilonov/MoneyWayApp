@@ -1,7 +1,6 @@
 package com.example.moneywayapp.api;
 
 import com.example.moneywayapp.model.dto.Category;
-import com.example.moneywayapp.model.dto.User;
 
 import java.util.List;
 

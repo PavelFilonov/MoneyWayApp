@@ -1,8 +1,7 @@
 package com.example.moneywayapp;
 
-import static com.example.moneywayapp.MainActivity.authResponse;
+import static com.example.moneywayapp.MainActivity.auth;
 import static com.example.moneywayapp.MainActivity.token;
-import static com.example.moneywayapp.MainActivity.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onClickLoginButton(View view) {
-        user = new User();
+        User user = new User();
         user.setEmail(emailText.getText().toString());
         user.setPassword(passwordText.getText().toString());
 
@@ -64,8 +63,8 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Неверный пароль", Toast.LENGTH_SHORT).show();
                         break;
                     case 200:
-                        authResponse = response.body();
-                        token = "Bearer_" + authResponse.getToken();
+                        auth = response.body();
+                        token = "Bearer_" + auth.getToken();
                         Log.i(TAG, response.message());
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         LoginActivity.this.startActivity(intent);

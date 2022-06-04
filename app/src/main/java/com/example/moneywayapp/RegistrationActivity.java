@@ -1,6 +1,6 @@
 package com.example.moneywayapp;
 
-import static com.example.moneywayapp.MainActivity.authResponse;
+import static com.example.moneywayapp.MainActivity.auth;
 import static com.example.moneywayapp.MainActivity.token;
 
 import android.content.Intent;
@@ -71,8 +71,8 @@ public class RegistrationActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Пользователь уже существует", Toast.LENGTH_SHORT).show();
                         break;
                     case 201:
-                        authResponse = response.body();
-                        token = "Bearer_" + authResponse.getToken();
+                        auth = response.body();
+                        token = "Bearer_" + auth.getToken();
                         Log.i(TAG, response.message());
                         Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
                         RegistrationActivity.this.startActivity(intent);

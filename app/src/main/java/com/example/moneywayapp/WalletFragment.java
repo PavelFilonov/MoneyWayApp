@@ -1,19 +1,25 @@
 package com.example.moneywayapp;
 
+import static com.example.moneywayapp.MainActivity.auth;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.moneywayapp.util.TransitionHandler;
+import com.example.moneywayapp.handler.TransitionHandler;
+import com.example.moneywayapp.handler.WalletHandler;
 
-public class WalletFragment extends Fragment {
+public class WalletFragment extends Fragment implements WalletHandler {
+
+    private TextView totalMoneyText;
 
     private Button incomeButton, expenseButton, historyButton;
 
@@ -32,6 +38,10 @@ public class WalletFragment extends Fragment {
         incomeButton = requireView().findViewById(R.id.incomeWalletButton);
         expenseButton = requireView().findViewById(R.id.expenseWalletButton);
         historyButton = requireView().findViewById(R.id.historyWalletButton);
+        TextView usernameText = requireView().findViewById(R.id.usernameWalletTextView);
+        totalMoneyText = requireView().findViewById(R.id.totalWalletTextView);
+
+        usernameText.setText(auth.getUser().getLogin());
 
         toProfileButton.setOnClickListener(this::onClickedToProfileButton);
         incomeButton.setOnClickListener(this::onClickedIncomeButton);
@@ -82,5 +92,10 @@ public class WalletFragment extends Fragment {
 
         historyButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.white));
         historyButton.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.blue));
+    }
+
+    @Override
+    public void setTotalMoney(String s) {
+        totalMoneyText.setText(s);
     }
 }

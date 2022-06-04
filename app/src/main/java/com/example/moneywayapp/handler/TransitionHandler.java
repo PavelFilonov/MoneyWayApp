@@ -1,4 +1,4 @@
-package com.example.moneywayapp.util;
+package com.example.moneywayapp.handler;
 
 public interface TransitionHandler {
     void moveToProfile();
@@ -8,4 +8,6 @@ public interface TransitionHandler {
     void moveToExpense();
 
     void moveToHistory();
+
+    void moveToLastFragment();
 }

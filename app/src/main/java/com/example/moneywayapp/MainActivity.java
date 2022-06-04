@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -13,7 +12,7 @@ import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
 import com.example.moneywayapp.model.dto.User;
 import com.example.moneywayapp.model.response.AuthResponse;
-import com.example.moneywayapp.util.TransitionHandler;
+import com.example.moneywayapp.handler.TransitionHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import retrofit2.Call;
@@ -24,24 +23,40 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public static User user;
-
     public static UserAPI userAPI;
 
-    public static AuthResponse authResponse;
+    public static AuthResponse auth;
 
     public static String token;
+
+    public static Fragment lastFragment;
+
+    private WalletFragment walletFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        initUser();
+        userAPI = HelperAPI.getRetrofitAuth().create(UserAPI.class);
+        Call<User> profile = userAPI.profile();
+        profile.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                auth.setUser(response.body()); // TODO: нужен id
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.w(TAG, t.getMessage());
+            }
+        });
+
+        walletFragment = new WalletFragment(this);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(nav_listener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WalletFragment(this)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, walletFragment).commit();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -58,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
                         fragment = new GroupsFragment();
                         break;
                     case R.id.menu_exit:
-                        user = null;
+                        auth = null;
                         exit = true;
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         MainActivity.this.startActivity(intent);
@@ -71,17 +86,19 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     @Override
     public void moveToProfile() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment(this)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new ProfileFragment(this)).commit();
     }
 
     @Override
     public void moveToIncome() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new IncomeFragment()).commit();
+        lastFragment = new IncomeFragment(walletFragment);
+        moveToLastFragment();
     }
 
     @Override
     public void moveToExpense() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new ExpenseFragment()).commit();
+        lastFragment = new ExpenseFragment();
+        moveToLastFragment();
     }
 
     @Override
@@ -89,21 +106,8 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new HistoryFragment()).commit();
     }
 
-    private void initUser() {
-        userAPI = HelperAPI.getRetrofit().create(UserAPI.class);
-        Call<User> call = userAPI.profile();
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                user = response.body();
-                TextView usernameTextView = findViewById(R.id.usernameWalletTextView);
-                usernameTextView.setText(user.getLogin());
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.w(TAG, t.getMessage());
-            }
-        });
+    @Override
+    public void moveToLastFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, lastFragment).commit();
     }
 }

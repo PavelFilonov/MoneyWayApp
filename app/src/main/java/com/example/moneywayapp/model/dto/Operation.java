@@ -5,13 +5,15 @@ public class Operation {
     private Long id;
     private TypeOperation type;
     private Category category;
+    private User user;
     private Double value;
     private String createdAt;
 
-    public Operation(Long id, TypeOperation type, Category category, Double value, String createdAt) {
+    public Operation(Long id, TypeOperation type, Category category, User user, Double value, String createdAt) {
         this.id = id;
         this.type = type;
         this.category = category;
+        this.user = user;
         this.value = value;
         this.createdAt = createdAt;
     }
@@ -41,6 +43,14 @@ public class Operation {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Double getValue() {

@@ -36,4 +36,6 @@
     <string name="history">История</string>
     <string name="new_category">Новая категория</string>
     <string name="add">Добавить</string>
+    <string name="back">Назад</string>
+    <string name="delete">Удалить</string>
 </resources>

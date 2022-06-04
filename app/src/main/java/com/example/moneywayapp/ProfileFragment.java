@@ -1,6 +1,6 @@
 package com.example.moneywayapp;
 
-import static com.example.moneywayapp.MainActivity.user;
+import static com.example.moneywayapp.MainActivity.auth;
 import static com.example.moneywayapp.MainActivity.userAPI;
 
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.moneywayapp.util.TransitionHandler;
+import com.example.moneywayapp.handler.TransitionHandler;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,7 +27,7 @@ public class ProfileFragment extends Fragment {
 
     private EditText emailText, loginText, passwordText;
 
-    private TransitionHandler transitionHandler;
+    private final TransitionHandler transitionHandler;
 
     public ProfileFragment(TransitionHandler transitionHandler) {
         super(R.layout.profile);
@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment {
         ImageButton updateLoginButton = requireView().findViewById(R.id.updateLoginButton);
         ImageButton updatePasswordButton = requireView().findViewById(R.id.updatePasswordButton);
 
-        loginTextView.setText(user.getLogin());
+        loginTextView.setText(auth.getUser().getLogin());
 
         updateEmailButton.setOnClickListener(this::onClickedUpdateEmailButton);
         updateLoginButton.setOnClickListener(this::onClickedUpdateLoginButton);
@@ -83,13 +83,13 @@ public class ProfileFragment extends Fragment {
                         break;
                     case 200:
                         if (successMessage.contains("Email"))
-                            user.setEmail(emailText.getText().toString());
+                            auth.getUser().setEmail(emailText.getText().toString());
 
                         if (successMessage.contains("Логин"))
-                            user.setEmail(loginText.getText().toString());
+                            auth.getUser().setEmail(loginText.getText().toString());
 
                         if (successMessage.contains("Пароль"))
-                            user.setEmail(passwordText.getText().toString());
+                            auth.getUser().setEmail(passwordText.getText().toString());
 
                         Log.i(TAG, successMessage);
                         Toast.makeText(getContext(), successMessage, Toast.LENGTH_SHORT).show();
