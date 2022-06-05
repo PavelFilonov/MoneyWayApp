@@ -1,6 +1,6 @@
 package com.example.moneywayapp.api;
 
-import com.example.moneywayapp.model.dto.Group;
+import com.example.moneywayapp.model.dto.GroupDTO;
 
 import java.util.List;
 
@@ -16,13 +16,13 @@ import retrofit2.http.Query;
 public interface GroupAPI {
 
     @GET("groups/{id}")
-    Call<Group> getById(@Path(value = "id") Long id);
+    Call<GroupDTO> getById(@Path(value = "id") Long id);
 
     @GET("groups")
-    Call<Group> getByToken(@Query(value = "token") String token);
+    Call<GroupDTO> getByToken(@Query(value = "token") String token);
 
     @POST("groups")
-    Call<Void> add(@Body Group group);
+    Call<Void> add(@Body GroupDTO group);
 
     @DELETE("groups/{id}")
     Call<Void> deleteById(@Path(value = "id") Long id);
@@ -34,7 +34,7 @@ public interface GroupAPI {
     Call<Void> addUser(@Path(value = "id") Long id);
 
     @GET("groups/users")
-    Call<List<Group>> getByUser();
+    Call<List<GroupDTO>> getByUser();
 
     @GET("groups/{id}/users")
     Call<String> getUsers(@Path(value = "id") Long id);

@@ -1,12 +1,12 @@
 package com.example.moneywayapp.model.response;
 
-import com.example.moneywayapp.model.dto.User;
+import com.example.moneywayapp.model.dto.UserDTO;
 
 public class AuthResponse {
-    private User user;
+    private UserDTO user;
     private String token;
 
-    public AuthResponse(User user, String token) {
+    public AuthResponse(UserDTO user, String token) {
         this.user = user;
         this.token = token;
     }
@@ -14,11 +14,11 @@ public class AuthResponse {
     public AuthResponse() {
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 

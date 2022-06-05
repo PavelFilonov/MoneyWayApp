@@ -8,22 +8,22 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.moneywayapp.api.CategoryOfUserAPI;
 import com.example.moneywayapp.api.HelperAPI;
-import com.example.moneywayapp.api.UserAPI;
-import com.example.moneywayapp.model.dto.User;
-import com.example.moneywayapp.model.response.AuthResponse;
+import com.example.moneywayapp.handler.CategoryHandler;
 import com.example.moneywayapp.handler.TransitionHandler;
+import com.example.moneywayapp.model.dto.CategoryDTO;
+import com.example.moneywayapp.model.dto.TypeOperation;
+import com.example.moneywayapp.model.response.AuthResponse;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements TransitionHandler {
+import retrofit2.Call;
+
+public class MainActivity extends AppCompatActivity implements TransitionHandler, CategoryHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    public static UserAPI userAPI;
 
     public static AuthResponse auth;
 
@@ -33,25 +33,14 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     private WalletFragment walletFragment;
 
+    private CategoryOfUserAPI categoryOfUserAPI;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        userAPI = HelperAPI.getRetrofitAuth().create(UserAPI.class);
-        Call<User> profile = userAPI.profile();
-        profile.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                auth.setUser(response.body()); // TODO: нужен id
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.w(TAG, t.getMessage());
-            }
-        });
-
+        categoryOfUserAPI = HelperAPI.getRetrofitAuth().create(CategoryOfUserAPI.class);
         walletFragment = new WalletFragment(this);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
@@ -86,12 +75,12 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     @Override
     public void moveToProfile() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new ProfileFragment(this)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment(this)).commit();
     }
 
     @Override
     public void moveToIncome() {
-        lastFragment = new IncomeFragment(walletFragment);
+        lastFragment = new IncomeFragment(walletFragment, this);
         moveToLastFragment();
     }
 
@@ -103,11 +92,63 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     @Override
     public void moveToHistory() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, new HistoryFragment()).commit();
+        lastFragment = new HistoryFragment();
+        moveToLastFragment();
     }
 
     @Override
     public void moveToLastFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, walletFragment).commit();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, lastFragment).commit();
+    }
+
+    @Override
+    public void moveToCategory(CategoryDTO category, TypeOperation typeOperation) {
+        getSupportFragmentManager().beginTransaction().replace(
+                R.id.fragment_container,
+                new CategoryItemFragment(category, this, typeOperation, this))
+                .commit();
+    }
+
+    @Override
+    public void deleteCategory(CategoryDTO category, TypeOperation typeOperation) {
+        Runnable task = () -> {
+            Call<Void> delete = categoryOfUserAPI.delete(category.getId());
+            try {
+                delete.execute();
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
+            }
+        };
+        joinThread(task);
+
+        if (typeOperation.equals(TypeOperation.INCOME))
+            lastFragment = new IncomeFragment(walletFragment, this);
+        else if (typeOperation.equals(TypeOperation.EXPENSE))
+            lastFragment = new ExpenseFragment();
+    }
+
+    @Override
+    public void rename(Long id, String name) {
+        Runnable task = () -> {
+            Call<Void> rename = categoryOfUserAPI.rename(id, name);
+            try {
+                rename.execute();
+                Log.i(TAG, "Категория переименована");
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
+            }
+        };
+        joinThread(task);
+    }
+
+    private void joinThread(Runnable task) {
+        Thread thread = new Thread(task);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            Log.w(TAG, e.getMessage());
+        }
     }
 }

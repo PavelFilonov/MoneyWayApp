@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.handler.TransitionHandler;
 import com.example.moneywayapp.handler.WalletHandler;
+import com.example.moneywayapp.model.dto.CategoryDTO;
+import com.example.moneywayapp.model.dto.TypeOperation;
 
 public class WalletFragment extends Fragment implements WalletHandler {
 

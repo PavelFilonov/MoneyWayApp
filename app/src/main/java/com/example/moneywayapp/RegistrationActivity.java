@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.UserAPI;
-import com.example.moneywayapp.model.dto.User;
+import com.example.moneywayapp.model.dto.UserDTO;
 import com.example.moneywayapp.model.response.AuthResponse;
 
 import retrofit2.Call;
@@ -51,7 +51,7 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Пароли не совпадают", Toast.LENGTH_SHORT).show();
         }
 
-        User user = new User();
+        UserDTO user = new UserDTO();
         user.setEmail(emailText.getText().toString());
         user.setLogin(loginText.getText().toString());
         user.setPassword(passwordText1.getText().toString());

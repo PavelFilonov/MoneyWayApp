@@ -1,16 +1,16 @@
 package com.example.moneywayapp.model.dto;
 
-public class Category {
+public class CategoryDTO {
 
     private Long id;
     private String name;
 
-    public Category(Long id, String name) {
+    public CategoryDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Category() {
+    public CategoryDTO() {
     }
 
     public Long getId() {

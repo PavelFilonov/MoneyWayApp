@@ -2,15 +2,15 @@ package com.example.moneywayapp.model.dto;
 
 import java.util.List;
 
-public class Group {
+public class GroupDTO {
 
     private Long id;
     private String name;
     private String token;
     private Long ownerId;
-    private List<Category> categories;
+    private List<CategoryDTO> categories;
 
-    public Group(Long id, String name, String token, Long ownerId, List<Category> categories) {
+    public GroupDTO(Long id, String name, String token, Long ownerId, List<CategoryDTO> categories) {
         this.id = id;
         this.name = name;
         this.token = token;
@@ -18,7 +18,7 @@ public class Group {
         this.categories = categories;
     }
 
-    public Group() {
+    public GroupDTO() {
     }
 
     public Long getId() {
@@ -53,11 +53,11 @@ public class Group {
         this.ownerId = ownerId;
     }
 
-    public List<Category> getCategories() {
+    public List<CategoryDTO> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<CategoryDTO> categories) {
         this.categories = categories;
     }
 }

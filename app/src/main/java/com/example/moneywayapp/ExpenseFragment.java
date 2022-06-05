@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.CategoryOfUserAPI;
 import com.example.moneywayapp.api.HelperAPI;
-import com.example.moneywayapp.model.dto.Category;
+import com.example.moneywayapp.model.dto.CategoryDTO;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -71,7 +71,7 @@ public class ExpenseFragment extends Fragment {
     }
 
     private void onClickedAddNewCategoryButton(View view) {
-        Category category = new Category();
+        CategoryDTO category = new CategoryDTO();
         category.setName(nameNewCategoryText.getText().toString());
 
         Call<Void> call = categoryAPI.add(category);

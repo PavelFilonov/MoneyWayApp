@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.GroupAPI;
 import com.example.moneywayapp.api.HelperAPI;
-import com.example.moneywayapp.model.dto.Group;
+import com.example.moneywayapp.model.dto.GroupDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,24 +56,24 @@ public class GroupsFragment extends Fragment {
         searchGroupButton.setOnClickListener(this::onClickedSearchGroupButton);
         createGroupButton.setOnClickListener(this::onClickedCreateGroupButton);
 
-        Call<List<Group>> call = groupAPI.getByUser();
-        call.enqueue(new Callback<List<Group>>() {
+        Call<List<GroupDTO>> call = groupAPI.getByUser();
+        call.enqueue(new Callback<List<GroupDTO>>() {
             @Override
-            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
-                List<Group> groups = response.body();
+            public void onResponse(Call<List<GroupDTO>> call, Response<List<GroupDTO>> response) {
+                List<GroupDTO> groups = response.body();
                 List<String> names = new ArrayList<>();
                 groups.forEach(group -> names.add(group.getName()));
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.group_list_item, names);
                 groupsListView.setAdapter(adapter);
                 groupsListView.setOnItemClickListener((adapterView, view1, i, l) -> {
-                    Group group = groups.get(i);
+                    GroupDTO group = groups.get(i);
                     // TODO: переход к группе
                 });
             }
 
             @Override
-            public void onFailure(Call<List<Group>> call, Throwable t) {
+            public void onFailure(Call<List<GroupDTO>> call, Throwable t) {
                 Log.w(TAG, t.getMessage());
             }
         });
@@ -84,7 +84,7 @@ public class GroupsFragment extends Fragment {
     }
 
     private void onClickedCreateGroupButton(View view) {
-        Group group = new Group();
+        GroupDTO group = new GroupDTO();
         group.setName(newGroupText.getText().toString());
         group.setOwnerId(auth.getUser().getId());
 

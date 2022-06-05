@@ -15,14 +15,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.OperationAPI;
-import com.example.moneywayapp.model.dto.Category;
-import com.example.moneywayapp.model.dto.Operation;
+import com.example.moneywayapp.model.dto.CategoryDTO;
+import com.example.moneywayapp.model.dto.OperationDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
 import com.example.moneywayapp.handler.CategoryHandler;
 import com.example.moneywayapp.handler.TransitionHandler;
 
 import java.time.LocalDateTime;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,9 +32,11 @@ public class CategoryItemFragment extends Fragment {
 
     private static final String TAG = CategoryItemFragment.class.getSimpleName();
 
-    private EditText newOperationValue;
+    private TextView nameCategoryItem;
 
-    private final Category category;
+    private EditText newOperationValue, newNameCategoryText;
+
+    private final CategoryDTO category;
 
     private final TransitionHandler transitionHandler;
 
@@ -43,7 +46,7 @@ public class CategoryItemFragment extends Fragment {
 
     private final TypeOperation typeOperation;
 
-    public CategoryItemFragment(Category category, TransitionHandler transitionHandler,
+    public CategoryItemFragment(CategoryDTO category, TransitionHandler transitionHandler,
                                 TypeOperation typeOperation, CategoryHandler categoryHandler) {
         super(R.layout.category_item);
         this.category = category;
@@ -58,9 +61,11 @@ public class CategoryItemFragment extends Fragment {
 
         ImageButton backButton = requireView().findViewById(R.id.backFromCategoryButton);
         ImageButton deleteButton = requireView().findViewById(R.id.deleteCategoryButton);
-        TextView nameCategoryItem = requireView().findViewById(R.id.nameCategoryItemText);
+        nameCategoryItem = requireView().findViewById(R.id.nameCategoryItemText);
         newOperationValue = requireView().findViewById(R.id.editTextNewOperation);
         Button addOperationButton = requireView().findViewById(R.id.addOperationButton);
+        newNameCategoryText = requireView().findViewById(R.id.editTextNewNameCategory);
+        Button renameCategoryButton = requireView().findViewById(R.id.renameCategoryButton);
 
         operationAPI = HelperAPI.getRetrofitAuth().create(OperationAPI.class);
         nameCategoryItem.setText(category.getName());
@@ -68,13 +73,20 @@ public class CategoryItemFragment extends Fragment {
         backButton.setOnClickListener(this::onClickedBackButton);
         deleteButton.setOnClickListener(this::onClickedDeleteButton);
         addOperationButton.setOnClickListener(this::onClickedAddOperationButton);
+        renameCategoryButton.setOnClickListener(this::onClickedRenameCategoryButton);
+    }
+
+    private void onClickedRenameCategoryButton(View view) {
+        String name = newNameCategoryText.getText().toString();
+        categoryHandler.rename(category.getId(), name);
+        nameCategoryItem.setText(name);
     }
 
     private void onClickedAddOperationButton(View view) {
-        Operation operation = new Operation();
+        OperationDTO operation = new OperationDTO();
         operation.setCategory(category);
         operation.setType(typeOperation);
-        operation.setCreatedAt(LocalDateTime.now().format(IncomeFragment.formatter));
+        operation.setCreatedAt(LocalDateTime.now().toString());
 
         try {
             operation.setValue(Double.parseDouble(newOperationValue.getText().toString()));
@@ -99,7 +111,7 @@ public class CategoryItemFragment extends Fragment {
     }
 
     private void onClickedDeleteButton(View view) {
-        categoryHandler.deleteCategory(category);
+        categoryHandler.deleteCategory(category, typeOperation);
         transitionHandler.moveToLastFragment();
     }
 

@@ -1,5 +1,8 @@
 package com.example.moneywayapp.handler;
 
+import com.example.moneywayapp.model.dto.CategoryDTO;
+import com.example.moneywayapp.model.dto.TypeOperation;
+
 public interface TransitionHandler {
     void moveToProfile();
 
@@ -10,4 +13,6 @@ public interface TransitionHandler {
     void moveToHistory();
 
     void moveToLastFragment();
+
+    void moveToCategory(CategoryDTO category, TypeOperation typeOperation);
 }

@@ -1,7 +1,6 @@
 package com.example.moneywayapp;
 
 import static com.example.moneywayapp.MainActivity.auth;
-import static com.example.moneywayapp.MainActivity.userAPI;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.moneywayapp.api.HelperAPI;
+import com.example.moneywayapp.api.UserAPI;
 import com.example.moneywayapp.handler.TransitionHandler;
 
 import retrofit2.Call;
@@ -28,6 +29,8 @@ public class ProfileFragment extends Fragment {
     private EditText emailText, loginText, passwordText;
 
     private final TransitionHandler transitionHandler;
+
+    private UserAPI userAPI;
 
     public ProfileFragment(TransitionHandler transitionHandler) {
         super(R.layout.profile);
@@ -45,12 +48,19 @@ public class ProfileFragment extends Fragment {
         ImageButton updateEmailButton = requireView().findViewById(R.id.updateEmailButton);
         ImageButton updateLoginButton = requireView().findViewById(R.id.updateLoginButton);
         ImageButton updatePasswordButton = requireView().findViewById(R.id.updatePasswordButton);
+        ImageButton exitFromProfileButton = requireView().findViewById(R.id.backFromProfileButton);
 
+        userAPI = HelperAPI.getRetrofitAuth().create(UserAPI.class);
         loginTextView.setText(auth.getUser().getLogin());
 
         updateEmailButton.setOnClickListener(this::onClickedUpdateEmailButton);
         updateLoginButton.setOnClickListener(this::onClickedUpdateLoginButton);
         updatePasswordButton.setOnClickListener(this::onClickedUpdatePasswordButton);
+        exitFromProfileButton.setOnClickListener(this::onClickedExitButton);
+    }
+
+    private void onClickedExitButton(View view) {
+        transitionHandler.moveToLastFragment();
     }
 
     private void onClickedUpdateEmailButton(View view) {

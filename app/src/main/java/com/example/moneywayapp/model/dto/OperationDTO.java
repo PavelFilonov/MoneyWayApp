@@ -1,15 +1,15 @@
 package com.example.moneywayapp.model.dto;
 
-public class Operation {
+public class OperationDTO {
 
     private Long id;
     private TypeOperation type;
-    private Category category;
-    private User user;
+    private CategoryDTO category;
+    private UserDTO user;
     private Double value;
     private String createdAt;
 
-    public Operation(Long id, TypeOperation type, Category category, User user, Double value, String createdAt) {
+    public OperationDTO(Long id, TypeOperation type, CategoryDTO category, UserDTO user, Double value, String createdAt) {
         this.id = id;
         this.type = type;
         this.category = category;
@@ -18,7 +18,7 @@ public class Operation {
         this.createdAt = createdAt;
     }
 
-    public Operation() {
+    public OperationDTO() {
     }
 
     public Long getId() {
@@ -37,19 +37,19 @@ public class Operation {
         this.type = type;
     }
 
-    public Category getCategory() {
+    public CategoryDTO getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(CategoryDTO category) {
         this.category = category;
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 

@@ -1,6 +1,6 @@
 package com.example.moneywayapp.api;
 
-import com.example.moneywayapp.model.dto.Category;
+import com.example.moneywayapp.model.dto.CategoryDTO;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 public interface CategoryOfGroupAPI {
 
     @GET("categories/groups/{groupId}")
-    Call<List<Category>> get(@Path(value = "groupId") Long groupId);
+    Call<List<CategoryDTO>> get(@Path(value = "groupId") Long groupId);
 
     @DELETE("categories/{id}/groups/{groupId}")
     Call<Void> delete(@Path(value = "id") Long id, @Path(value = "groupId") Long groupId);
@@ -25,5 +25,5 @@ public interface CategoryOfGroupAPI {
     Call<Void> rename(@Path(value = "id") Long id, @Path(value = "groupId") Long groupId, @Query(value = "name") String name);
 
     @POST("categories/groups/{groupId}")
-    Call<Void> add(@Body Category category, @Path(value = "groupId") Long groupId);
+    Call<Void> add(@Body CategoryDTO category, @Path(value = "groupId") Long groupId);
 }

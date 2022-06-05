@@ -2,19 +2,19 @@ package com.example.moneywayapp.model.dto;
 
 import java.util.List;
 
-public class User {
+public class UserDTO {
 
     private Long id;
     private String email;
     private String login;
     private String password;
-    private List<Group> groups;
-    private List<Category> categories;
+    private List<GroupDTO> groups;
+    private List<CategoryDTO> categories;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(Long id, String email, String login, String password, List<Group> groups, List<Category> categories) {
+    public UserDTO(Long id, String email, String login, String password, List<GroupDTO> groups, List<CategoryDTO> categories) {
         this.id = id;
         this.email = email;
         this.login = login;
@@ -55,19 +55,19 @@ public class User {
         this.password = password;
     }
 
-    public List<Group> getGroups() {
+    public List<GroupDTO> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<Group> groups) {
+    public void setGroups(List<GroupDTO> groups) {
         this.groups = groups;
     }
 
-    public List<Category> getCategories() {
+    public List<CategoryDTO> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<CategoryDTO> categories) {
         this.categories = categories;
     }
 }

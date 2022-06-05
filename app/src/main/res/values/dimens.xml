@@ -12,7 +12,7 @@
     <dimen name="text_alternative_action">17sp</dimen>
     <dimen name="alternative_action_top">30dp</dimen>
     <dimen name="register_header_top">60dp</dimen>
-    <dimen name="username">40sp</dimen>
+    <dimen name="username">34sp</dimen>
     <dimen name="account_data_top">120dp</dimen>
     <dimen name="row_horizontal">20dp</dimen>
     <dimen name="row_vertical">15dp</dimen>

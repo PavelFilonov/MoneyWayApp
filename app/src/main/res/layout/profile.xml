@@ -14,11 +14,22 @@
         android:layout_marginTop="@dimen/app_name_top"
         android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/backFromProfileButton"
+            android:layout_width="@dimen/min_size"
+            android:layout_height="@dimen/min_size"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:clickable="true"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back_blue_foreground" />
+
         <TextView
             android:id="@+id/usernameProfileTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="left"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
             android:textColor="@color/blue"
             android:textSize="@dimen/username"
             android:textStyle="bold" />

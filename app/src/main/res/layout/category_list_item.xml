@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="10dp"
+    android:layout_marginHorizontal="20dp"
     android:layout_marginTop="15dp"
     android:orientation="horizontal">
 
@@ -10,8 +10,8 @@
         android:id="@+id/categoriesListItemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
         android:layout_weight="1"
-        android:layout_marginLeft="@dimen/row_horizontal"
         android:gravity="left"
         android:textColor="@color/black"
         android:textSize="25sp"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginTop="15dp"
-        android:layout_weight="5"
+        android:layout_weight="4"
         android:textColor="@color/blue"
         android:textSize="25sp" />
 </LinearLayout>
