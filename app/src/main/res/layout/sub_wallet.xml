@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ExpenseFragment">
+    tools:context=".SubWalletFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editTextAddCategoryExpenseWallet"
+            android:id="@+id/editTextAddCategoryWallet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -25,7 +25,7 @@
             android:textColorHint="@color/gray" />
 
         <Button
-            android:id="@+id/addCategoryExpenseWalletButton"
+            android:id="@+id/addCategoryWalletButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/row_horizontal"
@@ -42,7 +42,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/datePickerExpenseWalletButton"
+            android:id="@+id/datePickerWalletButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/min_size"
             android:layout_marginTop="@dimen/border_button"
@@ -52,16 +52,20 @@
             android:src="@drawable/ic_date_foreground" />
 
         <TextView
-            android:id="@+id/dateExpenseWalletText"
+            android:id="@+id/dateWalletText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1" />
+            android:layout_weight="6" />
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/frame_expense_wallet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/categoriesWalletListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 </LinearLayout>

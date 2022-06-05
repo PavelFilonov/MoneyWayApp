@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,12 +27,7 @@ import com.example.moneywayapp.model.dto.CategoryDTO;
 import com.example.moneywayapp.model.dto.OperationDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,15 +35,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class IncomeFragment extends Fragment {
+public class SubWalletFragment extends Fragment {
 
-    private static final String TAG = IncomeFragment.class.getSimpleName();
+    private static final String TAG = SubWalletFragment.class.getSimpleName();
 
     private EditText nameNewCategoryText;
 
@@ -69,10 +62,13 @@ public class IncomeFragment extends Fragment {
 
     private TransitionHandler transitionHandler;
 
+    private TypeOperation type;
+
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
 
-    public IncomeFragment(WalletHandler walletHandler, TransitionHandler transitionHandler) {
-        super(R.layout.income);
+    public SubWalletFragment(TypeOperation type, WalletHandler walletHandler, TransitionHandler transitionHandler) {
+        super(R.layout.sub_wallet);
+        this.type = type;
         this.walletHandler = walletHandler;
         this.transitionHandler = transitionHandler;
     }
@@ -81,10 +77,10 @@ public class IncomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        nameNewCategoryText = requireView().findViewById(R.id.editTextAddCategoryIncomeWallet);
-        Button addNewCategoryButton = requireView().findViewById(R.id.addCategoryIncomeWalletButton);
-        ImageButton pickDateButton = requireView().findViewById(R.id.datePickerIncomeWalletButton);
-        dateText = requireView().findViewById(R.id.dateIncomeWalletText);
+        nameNewCategoryText = requireView().findViewById(R.id.editTextAddCategoryWallet);
+        Button addNewCategoryButton = requireView().findViewById(R.id.addCategoryWalletButton);
+        ImageButton pickDateButton = requireView().findViewById(R.id.datePickerWalletButton);
+        dateText = requireView().findViewById(R.id.dateWalletText);
         categoriesListView = requireView().findViewById(R.id.categoriesWalletListView);
 
         categoryAPI = HelperAPI.getRetrofitAuth().create(CategoryOfUserAPI.class);
@@ -104,6 +100,7 @@ public class IncomeFragment extends Fragment {
 
     List<CategoryDTO> categories = new ArrayList<>();
     List<Double> totals = new ArrayList<>();
+
     private void initCategories() {
         categories = new ArrayList<>();
         totals = new ArrayList<>();
@@ -150,7 +147,7 @@ public class IncomeFragment extends Fragment {
 
                 Double total = 0.;
                 for (OperationDTO operation : operations) {
-                    if (operation.getType().equals(TypeOperation.INCOME)) {
+                    if (operation.getType().equals(type)) {
                         total += operation.getValue();
                     }
                 }
@@ -199,7 +196,7 @@ public class IncomeFragment extends Fragment {
         categoriesListView.setAdapter(adapter);
 
         categoriesListView.setOnItemClickListener((adapterView, view, i, l) -> {
-            transitionHandler.moveToCategory(findCategoryById(positionIdMap.get(l)), TypeOperation.INCOME);
+            transitionHandler.moveToCategory(findCategoryById(positionIdMap.get(l)), type);
         });
     }
 

@@ -1,5 +1,8 @@
 package com.example.moneywayapp;
 
+import static com.example.moneywayapp.model.dto.TypeOperation.EXPENSE;
+import static com.example.moneywayapp.model.dto.TypeOperation.INCOME;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -80,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     @Override
     public void moveToIncome() {
-        lastFragment = new IncomeFragment(walletFragment, this);
+        lastFragment = new SubWalletFragment(INCOME, walletFragment, this);
         moveToLastFragment();
     }
 
     @Override
     public void moveToExpense() {
-        lastFragment = new ExpenseFragment();
+        lastFragment = new SubWalletFragment(EXPENSE, walletFragment, this);
         moveToLastFragment();
     }
 
@@ -122,10 +125,10 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
         };
         joinThread(task);
 
-        if (typeOperation.equals(TypeOperation.INCOME))
-            lastFragment = new IncomeFragment(walletFragment, this);
+        if (typeOperation.equals(INCOME))
+            lastFragment = new SubWalletFragment(INCOME, walletFragment, this);
         else if (typeOperation.equals(TypeOperation.EXPENSE))
-            lastFragment = new ExpenseFragment();
+            lastFragment = new SubWalletFragment(EXPENSE, walletFragment, this);
     }
 
     @Override
