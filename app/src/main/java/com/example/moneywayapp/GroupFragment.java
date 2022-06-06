@@ -156,7 +156,7 @@ public class GroupFragment extends Fragment implements WalletHandler {
         Runnable task = () -> {
             Call<Void> rename = categoryAPI.rename(id, group.getId(), name);
             try {
-                Response<Void> execute = rename.execute();
+                rename.execute();
                 Log.i(TAG, "Категория переименована");
             } catch (IOException e) {
                 Log.w(TAG, e.getMessage());
