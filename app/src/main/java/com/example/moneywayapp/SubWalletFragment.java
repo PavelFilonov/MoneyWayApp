@@ -54,9 +54,9 @@ public class SubWalletFragment extends Fragment {
 
     private OperationAPI operationAPI;
 
-    private LocalDateTime fromDate;
+    public static LocalDateTime fromDate;
 
-    private LocalDateTime toDate;
+    public static LocalDateTime toDate;
 
     private WalletHandler walletHandler;
 
@@ -64,7 +64,7 @@ public class SubWalletFragment extends Fragment {
 
     private TypeOperation type;
 
-    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
     public SubWalletFragment(TypeOperation type, WalletHandler walletHandler, TransitionHandler transitionHandler) {
         super(R.layout.sub_wallet);
@@ -86,8 +86,11 @@ public class SubWalletFragment extends Fragment {
         categoryAPI = HelperAPI.getRetrofitAuth().create(CategoryOfUserAPI.class);
         operationAPI = HelperAPI.getRetrofitAuth().create(OperationAPI.class);
 
-        toDate = LocalDateTime.now();
-        fromDate = toDate.minusDays(1);
+        if (toDate == null)
+            toDate = LocalDateTime.now();
+
+        if (fromDate == null)
+            fromDate = toDate.minusDays(1);
 
         addNewCategoryButton.setOnClickListener(this::onClickedAddNewCategoryButton);
         pickDateButton.setOnClickListener(this::onClickedPickerDateButton);
