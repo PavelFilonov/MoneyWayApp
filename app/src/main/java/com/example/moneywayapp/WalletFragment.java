@@ -1,31 +1,48 @@
 package com.example.moneywayapp;
 
 import static com.example.moneywayapp.MainActivity.auth;
+import static com.example.moneywayapp.MainActivity.joinThread;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.moneywayapp.api.CategoryOfUserAPI;
+import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.handler.TransitionHandler;
 import com.example.moneywayapp.handler.WalletHandler;
+import com.example.moneywayapp.model.TypeWallet;
 import com.example.moneywayapp.model.dto.CategoryDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
+
 public class WalletFragment extends Fragment implements WalletHandler {
+
+    private static final String TAG = WalletFragment.class.getSimpleName();
 
     private TextView totalMoneyText;
 
     private Button incomeButton, expenseButton, historyButton;
 
     private final TransitionHandler transitionHandler;
+
+    private CategoryOfUserAPI categoryAPI;
 
     public WalletFragment(TransitionHandler transitionHandler) {
         super(R.layout.wallet);
@@ -43,6 +60,7 @@ public class WalletFragment extends Fragment implements WalletHandler {
         TextView usernameText = requireView().findViewById(R.id.usernameWalletTextView);
         totalMoneyText = requireView().findViewById(R.id.totalWalletTextView);
 
+        categoryAPI = HelperAPI.getRetrofitAuth().create(CategoryOfUserAPI.class);
         usernameText.setText(auth.getUser().getLogin());
 
         toProfileButton.setOnClickListener(this::onClickedToProfileButton);
@@ -99,5 +117,69 @@ public class WalletFragment extends Fragment implements WalletHandler {
     @Override
     public void setTotalMoney(String s) {
         totalMoneyText.setText(s);
+    }
+
+    List<CategoryDTO> categories;
+
+    @Override
+    public List<CategoryDTO> getCategories() {
+        Runnable task = () -> {
+            Call<List<CategoryDTO>> call = categoryAPI.get();
+            Response<List<CategoryDTO>> response;
+            try {
+                response = call.execute();
+                categories = response.body();
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
+            }
+        };
+        joinThread(task);
+
+        if (categories == null)
+            return new ArrayList<>();
+
+        return categories;
+    }
+
+    @Override
+    public void deleteCategory(CategoryDTO category, TypeOperation typeOperation, TypeWallet typeWallet) {
+        Runnable task = () -> {
+            Call<Void> delete = categoryAPI.delete(category.getId());
+            try {
+                delete.execute();
+                Log.i(TAG, "Категория удалена");
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
+            }
+        };
+        joinThread(task);
+    }
+
+    @Override
+    public void renameCategory(Long id, String name) {
+        Runnable task = () -> {
+            Call<Void> rename = categoryAPI.rename(id, name);
+            try {
+                rename.execute();
+                Log.i(TAG, "Категория переименована");
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
+            }
+        };
+        joinThread(task);
+    }
+
+    @Override
+    public void addCategory(CategoryDTO category) {
+        Runnable task = () -> {
+            Call<Void> add = categoryAPI.add(category);
+            try {
+                add.execute();
+                Log.i(TAG, "Категория " + category.getName() + " добавлена");
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
+            }
+        };
+        joinThread(task);
     }
 }

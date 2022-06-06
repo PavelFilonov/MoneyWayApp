@@ -15,15 +15,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.OperationAPI;
+import com.example.moneywayapp.handler.TransitionHandler;
+import com.example.moneywayapp.handler.WalletHandler;
+import com.example.moneywayapp.model.TypeWallet;
 import com.example.moneywayapp.model.dto.CategoryDTO;
 import com.example.moneywayapp.model.dto.OperationDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
-import com.example.moneywayapp.handler.CategoryHandler;
-import com.example.moneywayapp.handler.TransitionHandler;
 
 import java.time.LocalDateTime;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,19 +40,23 @@ public class CategoryItemFragment extends Fragment {
 
     private final TransitionHandler transitionHandler;
 
-    private final CategoryHandler categoryHandler;
+    private final WalletHandler walletHandler;
 
     private OperationAPI operationAPI;
 
     private final TypeOperation typeOperation;
 
+    private final TypeWallet typeWallet;
+
     public CategoryItemFragment(CategoryDTO category, TransitionHandler transitionHandler,
-                                TypeOperation typeOperation, CategoryHandler categoryHandler) {
+                                TypeOperation typeOperation, WalletHandler walletHandler,
+                                TypeWallet typeWallet) {
         super(R.layout.category_item);
         this.category = category;
         this.transitionHandler = transitionHandler;
         this.typeOperation = typeOperation;
-        this.categoryHandler = categoryHandler;
+        this.walletHandler = walletHandler;
+        this.typeWallet = typeWallet;
     }
 
     @Override
@@ -78,7 +82,7 @@ public class CategoryItemFragment extends Fragment {
 
     private void onClickedRenameCategoryButton(View view) {
         String name = newNameCategoryText.getText().toString();
-        categoryHandler.rename(category.getId(), name);
+        walletHandler.renameCategory(category.getId(), name);
         nameCategoryItem.setText(name);
     }
 
@@ -111,11 +115,11 @@ public class CategoryItemFragment extends Fragment {
     }
 
     private void onClickedDeleteButton(View view) {
-        categoryHandler.deleteCategory(category, typeOperation);
-        transitionHandler.moveToLastFragment();
+        walletHandler.deleteCategory(category, typeOperation, typeWallet);
+        transitionHandler.moveToLastFragment(typeWallet);
     }
 
     private void onClickedBackButton(View view) {
-        transitionHandler.moveToLastFragment();
+        transitionHandler.moveToLastFragment(typeWallet);
     }
 }

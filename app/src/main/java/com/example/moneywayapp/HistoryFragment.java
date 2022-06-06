@@ -19,9 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.moneywayapp.api.CategoryOfUserAPI;
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.OperationAPI;
+import com.example.moneywayapp.handler.WalletHandler;
+import com.example.moneywayapp.model.TypeWallet;
 import com.example.moneywayapp.model.dto.CategoryDTO;
 import com.example.moneywayapp.model.dto.OperationDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
@@ -44,12 +45,16 @@ public class HistoryFragment extends Fragment {
 
     private ListView historyListView;
 
-    private CategoryOfUserAPI categoryOfUserAPI;
-
     private OperationAPI operationAPI;
 
-    public HistoryFragment() {
+    private final TypeWallet typeWallet;
+
+    private final WalletHandler walletHandler;
+
+    public HistoryFragment(TypeWallet typeWallet, WalletHandler walletHandler) {
         super(R.layout.history);
+        this.typeWallet = typeWallet;
+        this.walletHandler = walletHandler;
     }
 
     @Override
@@ -60,7 +65,6 @@ public class HistoryFragment extends Fragment {
         ImageButton pickDateButton = requireView().findViewById(R.id.datePickerWalletHistoryButton);
         dateText = requireView().findViewById(R.id.dateWalletHistoryText);
 
-        categoryOfUserAPI = HelperAPI.getRetrofitAuth().create(CategoryOfUserAPI.class);
         operationAPI = HelperAPI.getRetrofitAuth().create(OperationAPI.class);
 
         pickDateButton.setOnClickListener(this::onClickedPickerDateButton);
@@ -71,32 +75,11 @@ public class HistoryFragment extends Fragment {
         initHistory();
     }
 
-    List<CategoryDTO> categories = new ArrayList<>();
-    List<OperationDTO> operations = new ArrayList<>();
+    private List<OperationDTO> operations = new ArrayList<>();
 
     private void initHistory() {
-        categories = new ArrayList<>();
         operations = new ArrayList<>();
-
-        Runnable task = () -> {
-            Call<List<CategoryDTO>> call = categoryOfUserAPI.get();
-            Response<List<CategoryDTO>> response;
-            try {
-                response = call.execute();
-                categories = response.body();
-            } catch (IOException e) {
-                Log.w(TAG, e.getMessage());
-            }
-        };
-
-        Thread thread = new Thread(task);
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            Log.w(TAG, e.getMessage());
-            return;
-        }
+        List<CategoryDTO> categories = walletHandler.getCategories();
 
         for (CategoryDTO category : categories) {
             Runnable task2 = () -> {
@@ -136,9 +119,12 @@ public class HistoryFragment extends Fragment {
 
             String name = "";
             name += operations.get(i).getCategory().getName();
-            name += " (";
-            name += operations.get(i).getUser().getLogin();
-            name += ")";
+
+            if (typeWallet.equals(TypeWallet.GROUP)) {
+                name += " (";
+                name += operations.get(i).getUser().getLogin();
+                name += ")";
+            }
 
             Double value = operations.get(i).getValue();
             if (operations.get(i).getType().equals(TypeOperation.EXPENSE))

@@ -1,5 +1,6 @@
 package com.example.moneywayapp.handler;
 
+import com.example.moneywayapp.model.TypeWallet;
 import com.example.moneywayapp.model.dto.CategoryDTO;
 import com.example.moneywayapp.model.dto.GroupDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
@@ -13,9 +14,19 @@ public interface TransitionHandler {
 
     void moveToHistory();
 
-    void moveToLastFragment();
+    void moveToLastWalletFragment();
 
-    void moveToCategory(CategoryDTO category, TypeOperation typeOperation);
+    void moveToCategory(CategoryDTO category, TypeOperation typeOperation, TypeWallet typeWallet);
 
     void moveToGroup(GroupDTO group);
+
+    void moveToGroupIncome();
+
+    void moveToGroupExpense();
+
+    void moveToGroupHistory();
+
+    void moveToLastGroupFragment();
+
+    void moveToLastFragment(TypeWallet typeWallet);
 }

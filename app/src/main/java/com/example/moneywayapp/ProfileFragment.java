@@ -60,7 +60,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void onClickedExitButton(View view) {
-        transitionHandler.moveToLastFragment();
+        transitionHandler.moveToLastWalletFragment();
     }
 
     private void onClickedUpdateEmailButton(View view) {

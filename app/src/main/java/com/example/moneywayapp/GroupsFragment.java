@@ -1,6 +1,7 @@
 package com.example.moneywayapp;
 
 import static com.example.moneywayapp.MainActivity.auth;
+import static com.example.moneywayapp.MainActivity.joinThread;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -68,7 +69,7 @@ public class GroupsFragment extends Fragment {
         initGroups();
     }
 
-    List<GroupDTO> groups = new ArrayList<>();
+    List<GroupDTO> groups;
 
     private void initGroups() {
         groups = new ArrayList<>();
@@ -84,14 +85,7 @@ public class GroupsFragment extends Fragment {
             }
         };
 
-        Thread thread = new Thread(task);
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            Log.w(TAG, e.getMessage());
-            return;
-        }
+        joinThread(task);
 
         List<HashMap<String, String>> listItems = new ArrayList<>();
         SimpleAdapter adapter = new SimpleAdapter(getContext(), listItems, R.layout.group_list_item,
@@ -101,18 +95,20 @@ public class GroupsFragment extends Fragment {
 
         Map<Integer, Long> positionIdMap = new HashMap<>();
 
+        int position = 0;
         for (int i = groups.size() - 1; i >= 0; i--) {
             HashMap<String, String> resultsMap = new HashMap<>();
             String name = groups.get(i).getName();
             resultsMap.put("Name", name);
-            positionIdMap.put(i, groups.get(i).getId());
+            positionIdMap.put(position, groups.get(i).getId());
+            position++;
             listItems.add(resultsMap);
         }
 
         groupsListView.setAdapter(adapter);
 
         groupsListView.setOnItemClickListener((adapterView, view, i, l) -> {
-            transitionHandler.moveToGroup(findGroupById(positionIdMap.get(l)));
+            transitionHandler.moveToGroup(findGroupById(positionIdMap.get(i)));
         });
     }
 

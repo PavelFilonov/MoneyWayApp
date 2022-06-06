@@ -12,17 +12,16 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.moneywayapp.api.CategoryOfUserAPI;
 import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.api.OperationAPI;
 import com.example.moneywayapp.handler.TransitionHandler;
 import com.example.moneywayapp.handler.WalletHandler;
+import com.example.moneywayapp.model.TypeWallet;
 import com.example.moneywayapp.model.dto.CategoryDTO;
 import com.example.moneywayapp.model.dto.OperationDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
@@ -37,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SubWalletFragment extends Fragment {
@@ -50,27 +48,29 @@ public class SubWalletFragment extends Fragment {
 
     private ListView categoriesListView;
 
-    private CategoryOfUserAPI categoryAPI;
-
     private OperationAPI operationAPI;
 
     public static LocalDateTime fromDate;
 
     public static LocalDateTime toDate;
 
-    private WalletHandler walletHandler;
+    private final WalletHandler walletHandler;
 
-    private TransitionHandler transitionHandler;
+    private final TransitionHandler transitionHandler;
 
-    private TypeOperation type;
+    private final TypeOperation type;
+
+    private final TypeWallet typeWallet;
 
     public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
-    public SubWalletFragment(TypeOperation type, WalletHandler walletHandler, TransitionHandler transitionHandler) {
+    public SubWalletFragment(TypeOperation type, WalletHandler walletHandler,
+                             TransitionHandler transitionHandler, TypeWallet typeWallet) {
         super(R.layout.sub_wallet);
         this.type = type;
         this.walletHandler = walletHandler;
         this.transitionHandler = transitionHandler;
+        this.typeWallet = typeWallet;
     }
 
     @Override
@@ -83,7 +83,6 @@ public class SubWalletFragment extends Fragment {
         dateText = requireView().findViewById(R.id.dateWalletText);
         categoriesListView = requireView().findViewById(R.id.categoriesWalletListView);
 
-        categoryAPI = HelperAPI.getRetrofitAuth().create(CategoryOfUserAPI.class);
         operationAPI = HelperAPI.getRetrofitAuth().create(OperationAPI.class);
 
         if (toDate == null)
@@ -101,31 +100,15 @@ public class SubWalletFragment extends Fragment {
         initCategories();
     }
 
-    List<CategoryDTO> categories = new ArrayList<>();
-    List<Double> totals = new ArrayList<>();
+    List<CategoryDTO> categories;
+    List<Double> totals;
 
     private void initCategories() {
-        categories = new ArrayList<>();
         totals = new ArrayList<>();
+        categories = walletHandler.getCategories();
 
-        Runnable task = () -> {
-            Call<List<CategoryDTO>> call = categoryAPI.get();
-            Response<List<CategoryDTO>> response;
-            try {
-                response = call.execute();
-                categories = response.body();
-            } catch (IOException e) {
-                walletHandler.setTotalMoney(String.format("%s руб", 0));
-                Log.w(TAG, e.getMessage());
-            }
-        };
-
-        Thread thread = new Thread(task);
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            Log.w(TAG, e.getMessage());
+        if (categories.isEmpty()) {
+            walletHandler.setTotalMoney(String.format("%s руб", 0));
             return;
         }
 
@@ -199,7 +182,7 @@ public class SubWalletFragment extends Fragment {
         categoriesListView.setAdapter(adapter);
 
         categoriesListView.setOnItemClickListener((adapterView, view, i, l) -> {
-            transitionHandler.moveToCategory(findCategoryById(positionIdMap.get(l)), type);
+            transitionHandler.moveToCategory(findCategoryById(positionIdMap.get(l)), type, typeWallet);
         });
     }
 
@@ -223,30 +206,9 @@ public class SubWalletFragment extends Fragment {
         CategoryDTO category = new CategoryDTO();
         category.setName(nameNewCategoryText.getText().toString());
 
-        Call<Void> call = categoryAPI.add(category);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                String msg = "Категория " + category.getName() + " добавлена";
+        walletHandler.addCategory(category);
 
-                switch (response.code()) {
-                    case 422:
-                        Log.i(TAG, response.message());
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-                        break;
-                    case 201:
-                        Log.i(TAG, msg);
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-                        initCategories();
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.w(TAG, t.getMessage());
-            }
-        });
+        initCategories();
     }
 
 

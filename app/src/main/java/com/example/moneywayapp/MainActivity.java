@@ -11,21 +11,16 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.moneywayapp.api.CategoryOfUserAPI;
-import com.example.moneywayapp.api.HelperAPI;
-import com.example.moneywayapp.handler.CategoryHandler;
 import com.example.moneywayapp.handler.TransitionHandler;
+import com.example.moneywayapp.handler.WalletHandler;
+import com.example.moneywayapp.model.TypeWallet;
 import com.example.moneywayapp.model.dto.CategoryDTO;
 import com.example.moneywayapp.model.dto.GroupDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
 import com.example.moneywayapp.model.response.AuthResponse;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-
-public class MainActivity extends AppCompatActivity implements TransitionHandler, CategoryHandler {
+public class MainActivity extends AppCompatActivity implements TransitionHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -33,18 +28,19 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     public static String token;
 
-    public static Fragment lastFragment;
+    private Fragment lastWalletFragment;
+
+    private Fragment lastGroupFragment;
 
     private WalletFragment walletFragment;
 
-    private CategoryOfUserAPI categoryOfUserAPI;
+    private GroupFragment groupFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        categoryOfUserAPI = HelperAPI.getRetrofitAuth().create(CategoryOfUserAPI.class);
         walletFragment = new WalletFragment(this);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
@@ -84,77 +80,82 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     @Override
     public void moveToIncome() {
-        lastFragment = new SubWalletFragment(INCOME, walletFragment, this);
-        moveToLastFragment();
+        lastWalletFragment = new SubWalletFragment(INCOME, walletFragment, this, TypeWallet.USER);
+        moveToLastWalletFragment();
     }
 
     @Override
     public void moveToExpense() {
-        lastFragment = new SubWalletFragment(EXPENSE, walletFragment, this);
-        moveToLastFragment();
+        lastWalletFragment = new SubWalletFragment(EXPENSE, walletFragment, this, TypeWallet.USER);
+        moveToLastWalletFragment();
     }
 
     @Override
     public void moveToHistory() {
-        lastFragment = new HistoryFragment();
-        moveToLastFragment();
+        lastWalletFragment = new HistoryFragment(TypeWallet.USER, walletFragment);
+        moveToLastWalletFragment();
     }
 
     @Override
-    public void moveToLastFragment() {
+    public void moveToLastWalletFragment() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, walletFragment).commit();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, lastFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_wallet, lastWalletFragment).commit();
     }
 
     @Override
-    public void moveToCategory(CategoryDTO category, TypeOperation typeOperation) {
+    public void moveToCategory(CategoryDTO category, TypeOperation typeOperation, TypeWallet typeWallet) {
+        WalletHandler walletHandler = null;
+
+        if (typeWallet.equals(TypeWallet.USER))
+            walletHandler = walletFragment;
+        else if (typeWallet.equals(TypeWallet.GROUP))
+            walletHandler = groupFragment;
+
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container,
-                new CategoryItemFragment(category, this, typeOperation, this))
+                new CategoryItemFragment(category, this, typeOperation, walletHandler, typeWallet))
                 .commit();
     }
 
     @Override
     public void moveToGroup(GroupDTO group) {
-        getSupportFragmentManager().beginTransaction().replace(
-                R.id.fragment_container,
-                new GroupFragment(group))
-                .commit();
+        groupFragment = new GroupFragment(group, this);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, groupFragment).commit();
     }
 
     @Override
-    public void deleteCategory(CategoryDTO category, TypeOperation typeOperation) {
-        Runnable task = () -> {
-            Call<Void> delete = categoryOfUserAPI.delete(category.getId());
-            try {
-                delete.execute();
-            } catch (IOException e) {
-                Log.w(TAG, e.getMessage());
-            }
-        };
-        joinThread(task);
-
-        if (typeOperation.equals(INCOME))
-            lastFragment = new SubWalletFragment(INCOME, walletFragment, this);
-        else if (typeOperation.equals(TypeOperation.EXPENSE))
-            lastFragment = new SubWalletFragment(EXPENSE, walletFragment, this);
+    public void moveToGroupIncome() {
+        lastGroupFragment = new SubWalletFragment(INCOME, groupFragment, this, TypeWallet.GROUP);
+        moveToLastGroupFragment();
     }
 
     @Override
-    public void rename(Long id, String name) {
-        Runnable task = () -> {
-            Call<Void> rename = categoryOfUserAPI.rename(id, name);
-            try {
-                rename.execute();
-                Log.i(TAG, "Категория переименована");
-            } catch (IOException e) {
-                Log.w(TAG, e.getMessage());
-            }
-        };
-        joinThread(task);
+    public void moveToGroupExpense() {
+        lastGroupFragment = new SubWalletFragment(EXPENSE, groupFragment, this, TypeWallet.GROUP);
+        moveToLastGroupFragment();
     }
 
-    private void joinThread(Runnable task) {
+    @Override
+    public void moveToGroupHistory() {
+        lastGroupFragment = new HistoryFragment(TypeWallet.GROUP, groupFragment);
+        moveToLastGroupFragment();
+    }
+
+    @Override
+    public void moveToLastGroupFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, groupFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_group, lastGroupFragment).commit();
+    }
+
+    @Override
+    public void moveToLastFragment(TypeWallet typeWallet) {
+        if (typeWallet.equals(TypeWallet.USER))
+            moveToLastWalletFragment();
+        else if (typeWallet.equals(TypeWallet.GROUP))
+            moveToLastGroupFragment();
+    }
+
+    public static void joinThread(Runnable task) {
         Thread thread = new Thread(task);
         thread.start();
         try {

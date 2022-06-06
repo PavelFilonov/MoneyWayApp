@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,105 +15,63 @@
 
 
         <TextView
+            android:id="@+id/nameGroupTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/blue"
-            android:textSize="30sp"
-            android:text="Группа 1" />
+            android:textSize="30sp" />
 
         <TextView
+            android:id="@+id/totalGroupTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:layout_weight="1"
-            android:text="1000 р"
+            android:gravity="right"
             android:textColor="@color/blue"
             android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/border_button"
-        android:layout_marginTop="30dp"
-        android:background="@color/blue" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="@dimen/border_button"
-            android:layout_height="match_parent"
-            android:background="@color/blue"
-            android:orientation="vertical" />
-
         <Button
-            android:id="@+id/button"
+            android:id="@+id/incomeGroupButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
-            android:text="Доходы"
+            android:text="@string/income"
             android:textColor="@color/blue" />
 
-        <LinearLayout
-            android:layout_width="@dimen/border_button"
-            android:layout_height="match_parent"
-            android:background="@color/blue"
-            android:orientation="vertical" />
-
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/expenseGroupButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
-            android:text="Расходы"
+            android:text="@string/expense"
             android:textColor="@color/blue" />
 
-        <LinearLayout
-            android:layout_width="@dimen/border_button"
-            android:layout_height="match_parent"
-            android:background="@color/blue"
-            android:orientation="vertical" />
-
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/historyGroupButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
-            android:text="История"
+            android:text="@string/history"
             android:textColor="@color/blue" />
-
-        <LinearLayout
-            android:layout_width="@dimen/border_button"
-            android:layout_height="match_parent"
-            android:background="@color/blue"
-            android:orientation="vertical" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/blue" />
-
     <FrameLayout
-        android:id="@+id/frame_wallet"
+        android:id="@+id/frame_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-        </LinearLayout>
-    </FrameLayout>
+        android:layout_height="match_parent" />
 </LinearLayout>
