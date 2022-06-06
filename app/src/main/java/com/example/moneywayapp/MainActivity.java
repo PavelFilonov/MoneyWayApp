@@ -16,6 +16,7 @@ import com.example.moneywayapp.api.HelperAPI;
 import com.example.moneywayapp.handler.CategoryHandler;
 import com.example.moneywayapp.handler.TransitionHandler;
 import com.example.moneywayapp.model.dto.CategoryDTO;
+import com.example.moneywayapp.model.dto.GroupDTO;
 import com.example.moneywayapp.model.dto.TypeOperation;
 import com.example.moneywayapp.model.response.AuthResponse;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
                         fragment = new WalletFragment(this);
                         break;
                     case R.id.menu_groups:
-                        fragment = new GroupsFragment();
+                        fragment = new GroupsFragment(this);
                         break;
                     case R.id.menu_exit:
                         auth = null;
@@ -110,6 +111,14 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container,
                 new CategoryItemFragment(category, this, typeOperation, this))
+                .commit();
+    }
+
+    @Override
+    public void moveToGroup(GroupDTO group) {
+        getSupportFragmentManager().beginTransaction().replace(
+                R.id.fragment_container,
+                new GroupFragment(group))
                 .commit();
     }
 

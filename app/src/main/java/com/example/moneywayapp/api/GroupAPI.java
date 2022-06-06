@@ -22,7 +22,7 @@ public interface GroupAPI {
     Call<GroupDTO> getByToken(@Query(value = "token") String token);
 
     @POST("groups")
-    Call<Void> add(@Body GroupDTO group);
+    Call<GroupDTO> add(@Body GroupDTO group);
 
     @DELETE("groups/{id}")
     Call<Void> deleteById(@Path(value = "id") Long id);

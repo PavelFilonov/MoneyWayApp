@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,10 +17,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.moneywayapp.api.GroupAPI;
 import com.example.moneywayapp.api.HelperAPI;
+import com.example.moneywayapp.handler.TransitionHandler;
+import com.example.moneywayapp.model.dto.CategoryDTO;
 import com.example.moneywayapp.model.dto.GroupDTO;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,8 +43,11 @@ public class GroupsFragment extends Fragment {
 
     private GroupAPI groupAPI;
 
-    public GroupsFragment() {
+    private final TransitionHandler transitionHandler;
+
+    public GroupsFragment(TransitionHandler transitionHandler) {
         super(R.layout.groups);
+        this.transitionHandler = transitionHandler;
     }
 
     @Override
@@ -56,31 +65,66 @@ public class GroupsFragment extends Fragment {
         searchGroupButton.setOnClickListener(this::onClickedSearchGroupButton);
         createGroupButton.setOnClickListener(this::onClickedCreateGroupButton);
 
-        Call<List<GroupDTO>> call = groupAPI.getByUser();
-        call.enqueue(new Callback<List<GroupDTO>>() {
-            @Override
-            public void onResponse(Call<List<GroupDTO>> call, Response<List<GroupDTO>> response) {
-                List<GroupDTO> groups = response.body();
-                List<String> names = new ArrayList<>();
-                groups.forEach(group -> names.add(group.getName()));
+        initGroups();
+    }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.group_list_item, names);
-                groupsListView.setAdapter(adapter);
-                groupsListView.setOnItemClickListener((adapterView, view1, i, l) -> {
-                    GroupDTO group = groups.get(i);
-                    // TODO: переход к группе
-                });
-            }
+    List<GroupDTO> groups = new ArrayList<>();
 
-            @Override
-            public void onFailure(Call<List<GroupDTO>> call, Throwable t) {
-                Log.w(TAG, t.getMessage());
+    private void initGroups() {
+        groups = new ArrayList<>();
+
+        Runnable task = () -> {
+            Call<List<GroupDTO>> call = groupAPI.getByUser();
+            Response<List<GroupDTO>> response;
+            try {
+                response = call.execute();
+                groups = response.body();
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
             }
+        };
+
+        Thread thread = new Thread(task);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            Log.w(TAG, e.getMessage());
+            return;
+        }
+
+        List<HashMap<String, String>> listItems = new ArrayList<>();
+        SimpleAdapter adapter = new SimpleAdapter(getContext(), listItems, R.layout.group_list_item,
+                new String[]{"Name"},
+                new int[]{R.id.groupsListItemName});
+
+
+        Map<Integer, Long> positionIdMap = new HashMap<>();
+
+        for (int i = groups.size() - 1; i >= 0; i--) {
+            HashMap<String, String> resultsMap = new HashMap<>();
+            String name = groups.get(i).getName();
+            resultsMap.put("Name", name);
+            positionIdMap.put(i, groups.get(i).getId());
+            listItems.add(resultsMap);
+        }
+
+        groupsListView.setAdapter(adapter);
+
+        groupsListView.setOnItemClickListener((adapterView, view, i, l) -> {
+            transitionHandler.moveToGroup(findGroupById(positionIdMap.get(l)));
         });
     }
 
-    private void onClickedSearchGroupButton(View view) {
+    private GroupDTO findGroupById(Long id) {
+        for (GroupDTO group: groups) {
+            if (group.getId().equals(id))
+                return group;
+        }
+        return null;
+    }
 
+    private void onClickedSearchGroupButton(View view) {
     }
 
     private void onClickedCreateGroupButton(View view) {
@@ -88,22 +132,24 @@ public class GroupsFragment extends Fragment {
         group.setName(newGroupText.getText().toString());
         group.setOwnerId(auth.getUser().getId());
 
-        Call<Void> add = groupAPI.add(group);
-        add.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful())
-                    Log.i(TAG, "Группа добавлена");
-                else
-                    Log.w(TAG, response.errorBody().toString());
-
-                // TODO: переход в группу
+        Runnable task = () -> {
+            Call<GroupDTO> add = groupAPI.add(group);
+            Response<GroupDTO> response;
+            try {
+                response = add.execute();
+                GroupDTO addedGroup = response.body();
+                transitionHandler.moveToGroup(addedGroup);
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
             }
+        };
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Log.w(TAG, t.getMessage());
-            }
-        });
+        Thread thread = new Thread(task);
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            Log.w(TAG, e.getMessage());
+        }
     }
 }
