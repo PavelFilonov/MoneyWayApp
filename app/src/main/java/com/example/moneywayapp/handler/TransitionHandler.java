@@ -29,4 +29,10 @@ public interface TransitionHandler {
     void moveToLastGroupFragment();
 
     void moveToLastFragment(TypeWallet typeWallet);
+
+    void moveToGroups();
+
+    void copyText(String text);
+
+    void moveToGroupItem(GroupDTO group);
 }

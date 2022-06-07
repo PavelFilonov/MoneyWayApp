@@ -3,6 +3,7 @@ package com.example.moneywayapp;
 import static com.example.moneywayapp.MainActivity.auth;
 import static com.example.moneywayapp.MainActivity.joinThread;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,8 +40,6 @@ public class GroupsFragment extends Fragment {
 
     private EditText tokenText, newGroupText;
 
-    private Button searchGroupButton, createGroupButton;
-
     private ListView groupsListView;
 
     private GroupAPI groupAPI;
@@ -57,8 +57,8 @@ public class GroupsFragment extends Fragment {
 
         tokenText = requireView().findViewById(R.id.editTextToken);
         newGroupText = requireView().findViewById(R.id.editTextNewGroup);
-        searchGroupButton = requireView().findViewById(R.id.searchGroupButton);
-        createGroupButton = requireView().findViewById(R.id.createGroupButton);
+        Button searchGroupButton = requireView().findViewById(R.id.searchGroupButton);
+        Button createGroupButton = requireView().findViewById(R.id.createGroupButton);
         groupsListView = requireView().findViewById(R.id.groupsListView);
 
         groupAPI = HelperAPI.getRetrofitAuth().create(GroupAPI.class);
@@ -113,14 +113,53 @@ public class GroupsFragment extends Fragment {
     }
 
     private GroupDTO findGroupById(Long id) {
-        for (GroupDTO group: groups) {
+        for (GroupDTO group : groups) {
             if (group.getId().equals(id))
                 return group;
         }
         return null;
     }
 
+    private GroupDTO group;
+
     private void onClickedSearchGroupButton(View view) {
+        Runnable task = () -> {
+            try {
+                Call<GroupDTO> call = groupAPI.getByToken(tokenText.getText().toString());
+                Response<GroupDTO> response = call.execute();
+                group = response.body();
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage());
+            }
+        };
+        joinThread(task);
+
+        if (group == null)
+            Toast.makeText(getContext(), "Группа не найдена", Toast.LENGTH_LONG).show();
+        else {
+            AlertDialog.Builder ad = new AlertDialog.Builder(getContext());
+            ad.setTitle(String.format("Присоединиться к группе %s?", group.getName()));
+
+            ad.setPositiveButton("Да", (dialog, arg1) -> {
+                Runnable task1 = () -> {
+                    Call<Void> call = groupAPI.addUser(group.getId());
+                    try {
+                        call.execute();
+                        transitionHandler.moveToGroup(group);
+                    } catch (IOException e) {
+                        Log.w(TAG, e.getMessage());
+                    }
+                };
+                joinThread(task1);
+            });
+
+            ad.setNegativeButton("Нет", (dialog, arg1) -> {
+                tokenText.setText("");
+                Log.i(TAG, String.format("Пользователь %s не присоединился к группе %s", auth.getUser().getLogin(), group.getName()));
+            });
+
+            ad.show();
+        }
     }
 
     private void onClickedCreateGroupButton(View view) {

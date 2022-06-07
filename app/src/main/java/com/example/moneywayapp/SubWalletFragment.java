@@ -1,5 +1,7 @@
 package com.example.moneywayapp;
 
+import static com.example.moneywayapp.MainActivity.joinThread;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -113,7 +115,7 @@ public class SubWalletFragment extends Fragment {
         }
 
         for (CategoryDTO category : categories) {
-            Runnable task2 = () -> {
+            Runnable task = () -> {
                 Call<List<OperationDTO>> operationCall = operationAPI.getByCategoryAndPeriod(
                         category.getId(), fromDate.toString(), toDate.toString());
 
@@ -139,15 +141,7 @@ public class SubWalletFragment extends Fragment {
                 }
                 totals.add(total);
             };
-
-            Thread thread2 = new Thread(task2);
-            thread2.start();
-            try {
-                thread2.join();
-            } catch (InterruptedException e) {
-                Log.w(TAG, e.getMessage());
-                return;
-            }
+            joinThread(task);
         }
 
         double resultTotal = totals.stream().mapToDouble(t -> t).sum();

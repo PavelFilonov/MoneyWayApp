@@ -37,7 +37,7 @@ public interface GroupAPI {
     Call<List<GroupDTO>> getByUser();
 
     @GET("groups/{id}/users")
-    Call<String> getUsers(@Path(value = "id") Long id);
+    Call<List<String>> getUsers(@Path(value = "id") Long id);
 
     @PUT("groups/{id}")
     Call<Void> rename(@Path(value = "id") Long id, @Query("name") String name);

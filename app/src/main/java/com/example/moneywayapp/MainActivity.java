@@ -4,6 +4,8 @@ import static com.example.moneywayapp.model.dto.TypeOperation.EXPENSE;
 import static com.example.moneywayapp.model.dto.TypeOperation.INCOME;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,12 +38,16 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
 
     private GroupFragment groupFragment;
 
+    private ClipboardManager clipboardManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
         walletFragment = new WalletFragment(this);
+
+        clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(nav_listener);
@@ -153,6 +159,26 @@ public class MainActivity extends AppCompatActivity implements TransitionHandler
             moveToLastWalletFragment();
         else if (typeWallet.equals(TypeWallet.GROUP))
             moveToLastGroupFragment();
+    }
+
+    @Override
+    public void moveToGroups() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupsFragment(this)).commit();
+    }
+
+    @Override
+    public void copyText(String text) {
+        ClipData clipData = ClipData.newPlainText("token", text);
+        clipboardManager.setPrimaryClip(clipData);
+    }
+
+    @Override
+    public void moveToGroupItem(GroupDTO group) {
+        Fragment groupItemFragment = new GroupItemUsersFragment(group, this);
+        if (group.getOwnerId().equals(auth.getUser().getId()))
+            groupItemFragment = new GroupItemOwnerFragment(group, this);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, groupItemFragment).commit();
     }
 
     public static void joinThread(Runnable task) {

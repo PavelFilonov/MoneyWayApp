@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,8 +66,13 @@ public class GroupFragment extends Fragment implements WalletHandler {
         incomeButton.setOnClickListener(this::onClickedIncomeButton);
         expenseButton.setOnClickListener(this::onClickedExpenseButton);
         historyButton.setOnClickListener(this::onClickedHistoryButton);
+        nameGroup.setOnClickListener(this::onClickedGroupNameText);
 
         onClickedIncomeButton(incomeButton);
+    }
+
+    private void onClickedGroupNameText(View view) {
+        transitionHandler.moveToGroupItem(group);
     }
 
     @SuppressLint("ResourceAsColor")
@@ -142,7 +146,7 @@ public class GroupFragment extends Fragment implements WalletHandler {
         Runnable task = () -> {
             Call<Void> delete = categoryAPI.delete(category.getId(), group.getId());
             try {
-                Response<Void> execute = delete.execute();
+                delete.execute();
                 Log.i(TAG, "Категория удалена");
             } catch (IOException e) {
                 Log.w(TAG, e.getMessage());

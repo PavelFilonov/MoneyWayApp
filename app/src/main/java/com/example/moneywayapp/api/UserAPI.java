@@ -8,6 +8,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface UserAPI {
@@ -20,6 +21,9 @@ public interface UserAPI {
 
     @GET("users/profile")
     Call<UserDTO> profile();
+
+    @GET("users/{id}")
+    Call<UserDTO> getLoginById(@Path(value = "id") Long id);
 
     @PUT("users/profile/email")
     Call<Void> updateEmail(@Query(value = "email") String email);

@@ -23,7 +23,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="Транспорт (Pavel1)"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -34,7 +33,6 @@
                 android:layout_gravity="right"
                 android:layout_marginTop="5dp"
                 android:layout_weight="4"
-                android:text="15.0"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -46,7 +44,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:gravity="left"
-            android:text="2022-06-05T12:55:03.401"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
