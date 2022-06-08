@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
-            android:layout_weight="1.5"
+            android:layout_weight="1.7"
             android:layout_marginLeft="@dimen/row_horizontal"
             android:text="@string/search_group_button" />
     </LinearLayout>
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blue"
-            android:layout_weight="1.5"
+            android:layout_weight="1.7"
             android:layout_marginLeft="@dimen/row_horizontal"
             android:text="@string/create_group_button" />
     </LinearLayout>
