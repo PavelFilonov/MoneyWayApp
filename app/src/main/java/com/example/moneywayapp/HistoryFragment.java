@@ -114,6 +114,7 @@ public class HistoryFragment extends Fragment {
                 new String[]{"Name", "Value", "Date"},
                 new int[]{R.id.historyListItemName, R.id.historyListItemValue, R.id.historyListItemDate});
 
+        Double totalMoney = 0.;
         for (int i = operations.size() - 1; i >= 0; i--) {
             HashMap<String, String> resultsMap = new HashMap<>();
 
@@ -130,6 +131,8 @@ public class HistoryFragment extends Fragment {
             if (operations.get(i).getType().equals(TypeOperation.EXPENSE))
                 value *= -1;
 
+            totalMoney += value;
+
             LocalDateTime dateTime = LocalDateTime.parse(operations.get(i).getCreatedAt());
 
             resultsMap.put("Name", name);
@@ -139,6 +142,7 @@ public class HistoryFragment extends Fragment {
         }
 
         historyListView.setAdapter(adapter);
+        walletHandler.setTotalMoney(totalMoney.toString());
     }
 
     private void onClickedPickerDateButton(View view) {
